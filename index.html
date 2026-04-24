@@ -13,211 +13,157 @@
 
         /* ── Topbar ── */
         #topbar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             padding: 8px 14px;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 55%, #6d28d9 100%);
             box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-            flex-wrap: wrap;
-            min-height: 52px;
+            flex-wrap: wrap; min-height: 52px;
         }
-
-        /* Logo */
-        .brand {
-            font-size: 1.05rem;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: #fff;
-            white-space: nowrap;
-            margin-right: 4px;
-        }
+        .brand { font-size: 1.05rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; white-space: nowrap; margin-right: 4px; }
         .brand span { color: #fbbf24; }
-
-        /* Divisor */
         .sep { width: 1px; height: 24px; background: rgba(255,255,255,0.25); margin: 0 2px; }
 
-        /* Botón archivo */
         #fileLabel {
             display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 14px;
-            background: #7c3aed; color: #fff;
-            border-radius: 7px; cursor: pointer;
-            font-size: 0.82rem; font-weight: 600;
-            border: none; white-space: nowrap;
-            transition: background .2s, transform .15s;
+            padding: 6px 14px; background: #7c3aed; color: #fff;
+            border-radius: 7px; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+            border: none; white-space: nowrap; transition: background .2s, transform .15s;
         }
         #fileLabel:hover { background: #6d28d9; transform: translateY(-1px); }
         #fileInput { display: none; }
 
-        /* Botón limpiar */
         #clearBtn {
             display: none; align-items: center; gap: 6px;
-            padding: 6px 13px;
-            background: #dc2626; color: #fff;
+            padding: 6px 13px; background: #dc2626; color: #fff;
             border-radius: 7px; border: none; cursor: pointer;
-            font-size: 0.82rem; font-weight: 600;
-            white-space: nowrap;
+            font-size: 0.82rem; font-weight: 600; white-space: nowrap;
             transition: background .2s, transform .15s;
         }
         #clearBtn.visible { display: inline-flex; }
         #clearBtn:hover { background: #b91c1c; transform: translateY(-1px); }
 
-        /* Chip de estado / info */
         #statusChip {
-            display: none;
-            align-items: center; gap: 6px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem; font-weight: 600;
-            white-space: nowrap;
+            display: none; align-items: center; gap: 6px;
+            padding: 5px 12px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600; white-space: nowrap;
         }
         #statusChip.show { display: inline-flex; }
         #statusChip.s-info    { background: rgba(59,130,246,.25); color: #bfdbfe; }
         #statusChip.s-success { background: rgba(16,185,129,.25); color: #a7f3d0; }
         #statusChip.s-error   { background: rgba(239,68,68,.25);  color: #fca5a5; }
 
-        /* Chip de capas */
         #layerChip {
-            display: none;
-            align-items: center; gap: 6px;
-            padding: 5px 12px;
-            background: rgba(109,40,217,.35);
-            color: #e9d5ff;
-            border-radius: 20px;
-            font-size: 0.8rem; font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            border: 1px solid rgba(139,92,246,.4);
-            transition: background .2s;
+            display: none; align-items: center; gap: 6px;
+            padding: 5px 12px; background: rgba(109,40,217,.35); color: #e9d5ff;
+            border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; white-space: nowrap;
+            border: 1px solid rgba(139,92,246,.4); transition: background .2s;
         }
         #layerChip.show { display: inline-flex; }
         #layerChip:hover { background: rgba(109,40,217,.55); }
 
         /* ── Mapa ── */
-        #map {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-        }
-        #map-wrap {
-            position: relative;
-            flex: 1;
-        }
+        #map-wrap { position: relative; flex: 1; }
+        #map { position: absolute; top:0; left:0; right:0; bottom:0; }
         body { display: flex; flex-direction: column; }
 
-        /* ── Panel de capas flotante ── */
+        /* ── Panel de capas ── */
         #layerPanel {
-            position: absolute;
-            top: 10px; right: 10px;
-            z-index: 800;
-            background: rgba(17,24,39,.92);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(139,92,246,.35);
-            border-radius: 10px;
-            padding: 10px 12px;
-            min-width: 210px;
-            max-width: 260px;
-            max-height: calc(100vh - 80px);
-            overflow-y: auto;
-            display: none;
-            color: #f3f4f6;
-            font-size: 0.82rem;
+            position: absolute; top: 10px; right: 10px; z-index: 800;
+            background: rgba(17,24,39,.94); backdrop-filter: blur(8px);
+            border: 1px solid rgba(139,92,246,.35); border-radius: 10px;
+            padding: 10px 12px; width: 270px;
+            max-height: calc(100vh - 80px); overflow-y: auto;
+            display: none; color: #f3f4f6; font-size: 0.81rem;
         }
         #layerPanel.show { display: block; }
-        #layerPanel::-webkit-scrollbar { width: 5px; }
+        #layerPanel::-webkit-scrollbar { width: 4px; }
         #layerPanel::-webkit-scrollbar-thumb { background: #6d28d9; border-radius: 4px; }
 
         .lp-header {
             display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.75rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: .8px;
-            color: #a78bfa;
+            margin-bottom: 8px; font-size: 0.74rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .8px; color: #a78bfa;
         }
-        .lp-close {
-            background: none; border: none; color: #6b7280;
-            cursor: pointer; font-size: 0.9rem; line-height: 1;
-            padding: 0; transition: color .15s;
-        }
-        .lp-close:hover { color: #f9fafb; }
+        .lp-close { background:none; border:none; color:#6b7280; cursor:pointer; font-size:.9rem; padding:0; transition:color .15s; }
+        .lp-close:hover { color:#f9fafb; }
 
-        /* Grupo de capas */
-        .lp-group {
-            border: 1px solid rgba(139,92,246,.2);
-            border-radius: 7px;
-            margin-bottom: 8px;
-            overflow: hidden;
-        }
+        /* Grupo */
+        .lp-group { border: 1px solid rgba(139,92,246,.2); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+
         .lp-group-header {
-            display: flex; align-items: center; gap: 6px;
-            padding: 6px 9px;
-            background: rgba(109,40,217,.25);
-            cursor: default;
-        }
-        .lp-group-header input[type=checkbox] { accent-color: #a78bfa; flex-shrink: 0; }
-        .lp-group-label { flex: 1; font-weight: 700; font-size: 0.82rem; color: #e9d5ff; }
-        .lp-count { font-size: 0.72rem; color: #9ca3af; }
-        .lp-group-body { padding: 7px 9px 5px; }
-
-        /* Slider opacidad */
-        .lp-opacity {
             display: flex; align-items: center; gap: 7px;
-            margin-top: 2px;
+            padding: 6px 9px; background: rgba(109,40,217,.25);
+            cursor: pointer; user-select: none;
         }
-        .lp-opacity label { font-size: 0.74rem; color: #9ca3af; white-space: nowrap; }
-        .lp-opacity input[type=range] {
-            flex: 1; accent-color: #7c3aed;
-            height: 3px; cursor: pointer;
+        .lp-group-toggle { background:none; border:none; color:#a78bfa; padding:0; font-size:.72rem; line-height:1; flex-shrink:0; cursor:pointer; transition: transform .2s; }
+        .lp-group-toggle.open { transform: rotate(90deg); }
+        .lp-group-cb { accent-color:#a78bfa; flex-shrink:0; cursor:pointer; }
+        .lp-group-label { flex:1; font-weight:700; font-size:0.82rem; color:#e9d5ff; }
+        .lp-count { font-size:.71rem; color:#9ca3af; }
+
+        /* Slider de grupo */
+        .lp-group-body { padding: 6px 9px 7px; border-top: 1px solid rgba(139,92,246,.1); }
+        .lp-opacity { display:flex; align-items:center; gap:6px; }
+        .lp-opacity label { font-size:.72rem; color:#9ca3af; white-space:nowrap; }
+        .lp-opacity input[type=range] { flex:1; accent-color:#7c3aed; height:3px; cursor:pointer; }
+        .lp-opacity span { font-size:.72rem; color:#d1d5db; min-width:28px; text-align:right; }
+
+        /* Lista individual de overlays */
+        .lp-items { padding: 4px 9px 6px; border-top: 1px solid rgba(139,92,246,.08); display:none; }
+        .lp-items.open { display: block; }
+
+        .lp-item {
+            display: flex; align-items: flex-start; gap: 6px;
+            padding: 4px 2px; border-bottom: 1px solid rgba(255,255,255,.04);
         }
-        .lp-opacity span { font-size: 0.74rem; color: #d1d5db; min-width: 28px; text-align: right; }
+        .lp-item:last-child { border-bottom: none; }
+        .lp-item input[type=checkbox] { accent-color:#a78bfa; margin-top:2px; flex-shrink:0; cursor:pointer; }
+        .lp-item-label {
+            font-size: .76rem; color: #d1d5db; line-height: 1.3;
+            word-break: break-word;
+        }
+        .lp-item-label .place { color:#a78bfa; font-style:italic; }
+        .lp-item-label .loading { color:#6b7280; font-size:.7rem; }
 
         /* Feature label */
         .feature-label {
-            background: #fff; border: 2px solid #7c3aed;
-            padding: 3px 8px; border-radius: 5px;
-            font-weight: 600; font-size: 11px; color: #1f2937;
-            box-shadow: 0 2px 6px rgba(0,0,0,.2);
-            pointer-events: none;
+            background:#fff; border:2px solid #7c3aed;
+            padding:3px 8px; border-radius:5px;
+            font-weight:600; font-size:11px; color:#1f2937;
+            box-shadow:0 2px 6px rgba(0,0,0,.2); pointer-events:none;
         }
     </style>
 </head>
 <body>
 
-<!-- ── Topbar ── -->
+<!-- Topbar -->
 <div id="topbar">
     <div class="brand"><i class="fas fa-map-marked-alt"></i> <span>notsure</span> KML/KMZ</div>
     <div class="sep"></div>
-
     <input type="file" id="fileInput" accept=".kml,.kmz">
-    <label for="fileInput" id="fileLabel">
-        <i class="fas fa-folder-open"></i> Abrir archivo
-    </label>
-
+    <label for="fileInput" id="fileLabel"><i class="fas fa-folder-open"></i> Abrir archivo</label>
     <button id="clearBtn"><i class="fas fa-times"></i> Limpiar</button>
-
     <div id="statusChip"></div>
-    <div id="layerChip" title="Mostrar/ocultar panel de capas">
+    <div id="layerChip" title="Mostrar/ocultar capas">
         <i class="fas fa-layer-group"></i>
-        <span id="layerChipText">0 grupos</span>
+        <span id="layerChipText">0 capas</span>
     </div>
 </div>
 
-<!-- ── Mapa ── -->
+<!-- Mapa -->
 <div id="map-wrap">
     <div id="map"></div>
 
-    <!-- Panel de capas agrupadas -->
     <div id="layerPanel">
         <div class="lp-header">
             <span><i class="fas fa-layer-group"></i> Capas</span>
-            <button class="lp-close" id="lpClose" title="Cerrar"><i class="fas fa-times"></i></button>
+            <button class="lp-close" id="lpClose"><i class="fas fa-times"></i></button>
         </div>
         <div id="layerList"></div>
     </div>
 </div>
 
-<!-- JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
@@ -229,8 +175,8 @@
  * Licencia: GPL-3.0
  */
 
-// ── Mapa ──
-const map = L.map('map', { preferCanvas: true, zoomControl: true })
+// ── Mapa base ──
+const map = L.map('map', { preferCanvas: true })
              .setView([-51.62038256588755, -69.22341147299332], 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -238,40 +184,74 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
 }).addTo(map);
 
-// ── Ajustar altura del mapa al espacio disponible ──
 function resizeMap() {
     const topH = document.getElementById('topbar').offsetHeight;
-    const wrap  = document.getElementById('map-wrap');
-    wrap.style.height = (window.innerHeight - topH) + 'px';
+    document.getElementById('map-wrap').style.height = (window.innerHeight - topH) + 'px';
     map.invalidateSize();
 }
 window.addEventListener('resize', resizeMap);
 resizeMap();
 
 // ── Estado ──
-// groups: { [groupName]: { layers: [{layer, opacity}], visible, masterOpacity } }
+// groups: { [groupName]: { items: [{layer, north,south,east,west, visible, labelEl, cbEl}], visible, masterOpacity } }
 let groups = {};
 
-const fileInput   = document.getElementById('fileInput');
-const statusChip  = document.getElementById('statusChip');
-const clearBtn    = document.getElementById('clearBtn');
-const layerPanel  = document.getElementById('layerPanel');
-const layerList   = document.getElementById('layerList');
-const layerChip   = document.getElementById('layerChip');
-const layerChipTx = document.getElementById('layerChipText');
-const lpClose     = document.getElementById('lpClose');
+const fileInput    = document.getElementById('fileInput');
+const statusChip   = document.getElementById('statusChip');
+const clearBtn     = document.getElementById('clearBtn');
+const layerPanel   = document.getElementById('layerPanel');
+const layerList    = document.getElementById('layerList');
+const layerChip    = document.getElementById('layerChip');
+const layerChipTx  = document.getElementById('layerChipText');
+const lpClose      = document.getElementById('lpClose');
+
+// ── Geocoder cache (Nominatim) ──
+const geoCache = {};
+const geoQueue = [];   // {lat, lon, callback}
+let   geoRunning = false;
+
+// Nominatim rate-limit: 1 req/s
+async function drainGeoQueue() {
+    if (geoRunning || !geoQueue.length) return;
+    geoRunning = true;
+    while (geoQueue.length) {
+        const { lat, lon, callback } = geoQueue.shift();
+        const key = `${lat.toFixed(2)},${lon.toFixed(2)}`;
+        if (geoCache[key]) { callback(geoCache[key]); continue; }
+        try {
+            const res  = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=8`,
+                { headers: { 'Accept-Language': 'es' } }
+            );
+            const data = await res.json();
+            const addr = data.address || {};
+            // Prioridad: city → town → village → county → state
+            const place = addr.city || addr.town || addr.village || addr.county || addr.state || '';
+            geoCache[key] = place;
+            callback(place);
+        } catch(_) { callback(''); }
+        if (geoQueue.length) await new Promise(r => setTimeout(r, 1100)); // rate limit
+    }
+    geoRunning = false;
+}
+
+function reverseGeocode(lat, lon, callback) {
+    geoQueue.push({ lat, lon, callback });
+    drainGeoQueue();
+}
 
 // ── UI helpers ──
 function showStatus(msg, type) {
-    const icons = { info: 'fa-spinner fa-spin', success: 'fa-check-circle', error: 'fa-exclamation-circle' };
+    const icons = { info:'fa-spinner fa-spin', success:'fa-check-circle', error:'fa-exclamation-circle' };
     statusChip.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
     statusChip.className = `show s-${type}`;
     if (type === 'success') setTimeout(() => statusChip.classList.remove('show'), 4000);
 }
 
 function clearMap() {
-    Object.values(groups).forEach(g => g.layers.forEach(l => map.removeLayer(l.layer)));
+    Object.values(groups).forEach(g => g.items.forEach(it => map.removeLayer(it.layer)));
     groups = {};
+    geoQueue.length = 0;
     statusChip.className = '';
     clearBtn.classList.remove('visible');
     fileInput.value = '';
@@ -280,42 +260,47 @@ function clearMap() {
     layerList.innerHTML = '';
 }
 clearBtn.addEventListener('click', clearMap);
-
-// Toggle panel desde chip
 layerChip.addEventListener('click', () => layerPanel.classList.toggle('show'));
-lpClose.addEventListener('click', () => layerPanel.classList.remove('show'));
+lpClose.addEventListener('click',  () => layerPanel.classList.remove('show'));
 
-// ── Agregar una imagen overlay a un grupo ──
+// ── Agregar overlay a grupo (desactivado por defecto) ──
 function addToGroup(groupName, north, south, east, west, imageUrl, opacity) {
-    if (!groups[groupName]) groups[groupName] = { layers: [], visible: true, masterOpacity: opacity };
-    const layer = L.imageOverlay(imageUrl, [[south,west],[north,east]], { opacity, interactive: false }).addTo(map);
-    groups[groupName].layers.push({ layer, opacity });
+    if (!groups[groupName]) groups[groupName] = { items:[], visible:false, masterOpacity: opacity };
+    const layer = L.imageOverlay(imageUrl, [[south,west],[north,east]], { opacity: 0, interactive:false });
+    // NO se agrega al mapa — desactivado por defecto
+    groups[groupName].items.push({ layer, north, south, east, west, visible:false, labelEl:null, cbEl:null });
 }
 
-// ── Rebuild panel (agrupado) ──
+// ── Rebuild panel ──
 function rebuildPanel() {
     layerList.innerHTML = '';
     const keys = Object.keys(groups);
-    if (keys.length === 0) { layerPanel.classList.remove('show'); layerChip.classList.remove('show'); return; }
+    if (!keys.length) { layerPanel.classList.remove('show'); layerChip.classList.remove('show'); return; }
 
-    layerChipTx.textContent = keys.length + ' grupo' + (keys.length !== 1 ? 's' : '');
+    // Conteo total de overlays
+    const total = keys.reduce((s,k) => s + groups[k].items.length, 0);
+    layerChipTx.textContent = total + ' capa' + (total !== 1 ? 's' : '');
     layerChip.classList.add('show');
 
     keys.forEach(gname => {
         const g = groups[gname];
-        const div = document.createElement('div');
-        div.className = 'lp-group';
 
-        // Header del grupo
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'lp-group';
+
+        // ── Header del grupo ──
         const hdr = document.createElement('div');
         hdr.className = 'lp-group-header';
 
-        const cb = document.createElement('input');
-        cb.type = 'checkbox'; cb.checked = g.visible;
-        cb.addEventListener('change', () => {
-            g.visible = cb.checked;
-            g.layers.forEach(l => { if (g.visible) l.layer.addTo(map); else map.removeLayer(l.layer); });
-        });
+        // Flecha toggle de expansión
+        const arrow = document.createElement('button');
+        arrow.className = 'lp-group-toggle';
+        arrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+
+        // Checkbox de grupo (activa/desactiva todos)
+        const groupCb = document.createElement('input');
+        groupCb.type = 'checkbox'; groupCb.className = 'lp-group-cb';
+        groupCb.checked = false; // desactivado por defecto
 
         const lbl = document.createElement('span');
         lbl.className = 'lp-group-label';
@@ -323,26 +308,34 @@ function rebuildPanel() {
 
         const cnt = document.createElement('span');
         cnt.className = 'lp-count';
-        cnt.textContent = g.layers.length + ' img';
+        cnt.textContent = g.items.length;
 
-        hdr.appendChild(cb);
+        // Toggle todos los items del grupo
+        groupCb.addEventListener('change', () => {
+            g.visible = groupCb.checked;
+            g.items.forEach(it => {
+                it.visible = groupCb.checked;
+                if (it.cbEl) it.cbEl.checked = groupCb.checked;
+                if (groupCb.checked) { it.layer.setOpacity(g.masterOpacity); it.layer.addTo(map); }
+                else { it.layer.setOpacity(0); map.removeLayer(it.layer); }
+            });
+        });
+
+        hdr.appendChild(arrow);
+        hdr.appendChild(groupCb);
         hdr.appendChild(lbl);
         hdr.appendChild(cnt);
 
-        // Body: solo slider de opacidad
+        // ── Body del grupo: slider opacidad ──
         const body = document.createElement('div');
         body.className = 'lp-group-body';
 
         const opRow = document.createElement('div');
         opRow.className = 'lp-opacity';
-
-        const opLbl = document.createElement('label');
-        opLbl.textContent = 'Opacidad';
-
+        const opLbl = document.createElement('label'); opLbl.textContent = 'Opacidad';
         const slider = document.createElement('input');
         slider.type = 'range'; slider.min = 0; slider.max = 100;
         slider.value = Math.round(g.masterOpacity * 100);
-
         const valSpan = document.createElement('span');
         valSpan.textContent = slider.value + '%';
 
@@ -350,17 +343,76 @@ function rebuildPanel() {
             const op = parseInt(slider.value) / 100;
             g.masterOpacity = op;
             valSpan.textContent = slider.value + '%';
-            g.layers.forEach(l => l.layer.setOpacity(op));
+            g.items.forEach(it => { if (it.visible) it.layer.setOpacity(op); });
         });
-
-        opRow.appendChild(opLbl);
-        opRow.appendChild(slider);
-        opRow.appendChild(valSpan);
+        opRow.appendChild(opLbl); opRow.appendChild(slider); opRow.appendChild(valSpan);
         body.appendChild(opRow);
 
-        div.appendChild(hdr);
-        div.appendChild(body);
-        layerList.appendChild(div);
+        // ── Lista individual de overlays ──
+        const itemsDiv = document.createElement('div');
+        itemsDiv.className = 'lp-items';
+
+        g.items.forEach((item, idx) => {
+            const row = document.createElement('div');
+            row.className = 'lp-item';
+
+            const cb = document.createElement('input');
+            cb.type = 'checkbox'; cb.checked = false;
+            item.cbEl = cb;
+
+            cb.addEventListener('change', () => {
+                item.visible = cb.checked;
+                if (cb.checked) { item.layer.setOpacity(g.masterOpacity); item.layer.addTo(map); }
+                else { item.layer.setOpacity(0); map.removeLayer(item.layer); }
+                // Actualizar estado del checkbox de grupo
+                const allChecked  = g.items.every(i => i.visible);
+                const someChecked = g.items.some(i => i.visible);
+                groupCb.checked = allChecked;
+                groupCb.indeterminate = !allChecked && someChecked;
+                g.visible = someChecked;
+            });
+
+            const lblDiv = document.createElement('div');
+            lblDiv.className = 'lp-item-label';
+            item.labelEl = lblDiv;
+
+            // Nombre base + placeholder de localidad
+            const centerLat = (item.north + item.south) / 2;
+            const centerLon = (item.east  + item.west)  / 2;
+
+            lblDiv.innerHTML = `${gname} <span class="loading">(geocodificando…)</span>`;
+
+            // Geocodificación asíncrona
+            reverseGeocode(centerLat, centerLon, place => {
+                if (item.labelEl) {
+                    item.labelEl.innerHTML = place
+                        ? `${gname} <span class="place">(${place})</span>`
+                        : gname;
+                }
+            });
+
+            row.appendChild(cb);
+            row.appendChild(lblDiv);
+            itemsDiv.appendChild(row);
+        });
+
+        // Toggle expansión de la lista
+        let open = false;
+        function toggleItems() {
+            open = !open;
+            arrow.classList.toggle('open', open);
+            itemsDiv.classList.toggle('open', open);
+        }
+        arrow.addEventListener('click', (e) => { e.stopPropagation(); toggleItems(); });
+        hdr.addEventListener('click', (e) => {
+            if (e.target === groupCb || groupCb.contains(e.target)) return;
+            toggleItems();
+        });
+
+        groupDiv.appendChild(hdr);
+        groupDiv.appendChild(body);
+        groupDiv.appendChild(itemsDiv);
+        layerList.appendChild(groupDiv);
     });
 }
 
@@ -377,7 +429,7 @@ function makePopup(props) {
 
 function addVectorGroup(geojson, groupName) {
     if (!geojson?.features?.length) return;
-    if (!groups[groupName]) groups[groupName] = { layers: [], visible: true, masterOpacity: 0.85 };
+    if (!groups[groupName]) groups[groupName] = { items:[], visible:false, masterOpacity:0.85 };
     const layer = L.geoJSON(geojson, {
         style: () => ({ color:'#7c3aed', weight:2.5, opacity:.85, fillOpacity:.3, fillColor:'#a855f7' }),
         pointToLayer: (f,ll) => L.circleMarker(ll, { radius:7, fillColor:'#7c3aed', color:'#fff', weight:2, fillOpacity:.9 }),
@@ -386,8 +438,12 @@ function addVectorGroup(geojson, groupName) {
             const n = f.properties?.name || f.properties?.Name;
             if (n) lyr.bindTooltip(n, { permanent:false, direction:'top', className:'feature-label' });
         }
-    }).addTo(map);
-    groups[groupName].layers.push({ layer, opacity: 0.85 });
+    }); // desactivado por defecto también
+    const b = layer.getBounds();
+    groups[groupName].items.push({
+        layer, visible:false, cbEl:null, labelEl:null,
+        north: b.getNorth(), south: b.getSouth(), east: b.getEast(), west: b.getWest()
+    });
 }
 
 // ── Parser KML ──
@@ -396,28 +452,25 @@ async function parseKMLDocument(kmlText, zipFiles, layerPrefix, parentGroupName)
     const doc    = parser.parseFromString(kmlText, 'text/xml');
     if (doc.querySelector('parsererror')) throw new Error('KML inválido');
 
-    // Nombre del documento como nombre de grupo
     const docName = parentGroupName ||
                     doc.querySelector('Document > name')?.textContent.trim() ||
                     'Capa';
 
-    // NetworkLinks → sub-KMLs
+    // NetworkLinks
     for (const nl of doc.querySelectorAll('NetworkLink')) {
         const hrefEl = nl.querySelector('Link > href, Url > href');
         if (!hrefEl) continue;
-        const href = hrefEl.textContent.trim();
+        const href   = hrefEl.textContent.trim();
         const subFile = zipFiles[href] || zipFiles[href.replace(/^\//, '')];
         if (!subFile) continue;
         const innerKml = await subFile.async('text');
         const dir = href.substring(0, href.lastIndexOf('/') + 1);
-        // Nombre del sub-grupo desde el NetworkLink
         const nlName = nl.querySelector('name')?.textContent.trim() || docName;
         await parseKMLDocument(innerKml, zipFiles, dir, nlName);
     }
 
-    // GroundOverlays → agrupar por nombre del Folder padre o nombre del Document
-    const overlays = doc.querySelectorAll('GroundOverlay');
-    for (const go of overlays) {
+    // GroundOverlays
+    for (const go of doc.querySelectorAll('GroundOverlay')) {
         const north = parseFloat(go.querySelector('LatLonBox > north, LatLonAltBox > north')?.textContent);
         const south = parseFloat(go.querySelector('LatLonBox > south, LatLonAltBox > south')?.textContent);
         const east  = parseFloat(go.querySelector('LatLonBox > east,  LatLonAltBox > east')?.textContent);
@@ -428,16 +481,15 @@ async function parseKMLDocument(kmlText, zipFiles, layerPrefix, parentGroupName)
         const colorHex = go.querySelector('color')?.textContent.trim();
         let opacity = 0.75;
         if (colorHex?.length >= 2) {
-            const alpha = parseInt(colorHex.substring(0,2), 16) / 255;
+            const alpha = parseInt(colorHex.substring(0,2),16) / 255;
             opacity = alpha < 0.1 ? 0.75 : alpha;
         }
 
-        // Nombre del grupo: usar parentGroupName (viene del NetworkLink) o docName
         const groupName = parentGroupName || docName;
-
-        const fullPath = (layerPrefix || '') + href;
-        const imgFile  = zipFiles[fullPath] || zipFiles[href];
+        const fullPath  = (layerPrefix || '') + href;
+        const imgFile   = zipFiles[fullPath] || zipFiles[href];
         if (!imgFile) continue;
+
         const blob   = await imgFile.async('blob');
         const imgUrl = URL.createObjectURL(blob);
         addToGroup(groupName, north, south, east, west, imgUrl, opacity);
@@ -475,8 +527,7 @@ fileInput.addEventListener('change', async (e) => {
             }
             if (!rootKml) throw new Error('No se encontró KML raíz en el KMZ');
 
-            const rootText = await rootKml.async('text');
-            await parseKMLDocument(rootText, zipFiles, '', null);
+            await parseKMLDocument(await rootKml.async('text'), zipFiles, '', null);
         } else {
             await parseKMLDocument(await file.text(), {}, '', null);
         }
@@ -485,18 +536,19 @@ fileInput.addEventListener('change', async (e) => {
             showStatus('Sin datos visualizables', 'error'); return;
         }
 
-        // Ajustar vista
+        // Ajustar vista al bounding box total (aunque capas estén ocultas)
         try {
             let combined = null;
-            Object.values(groups).forEach(g => g.layers.forEach(l => {
-                const b = l.layer.getBounds?.();
-                if (b) combined = combined ? combined.extend(b) : b;
+            Object.values(groups).forEach(g => g.items.forEach(it => {
+                const b = L.latLngBounds([[it.south, it.west],[it.north, it.east]]);
+                combined = combined ? combined.extend(b) : b;
             }));
-            if (combined) map.fitBounds(combined, { padding: [40,40] });
+            if (combined) map.fitBounds(combined, { padding:[40,40] });
         } catch(_) {}
 
-        showStatus('Cargado correctamente', 'success');
+        showStatus('Cargado — capas desactivadas por defecto', 'success');
         rebuildPanel();
+        layerPanel.classList.add('show');
         clearBtn.classList.add('visible');
 
     } catch(err) {
