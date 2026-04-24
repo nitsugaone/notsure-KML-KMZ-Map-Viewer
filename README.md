@@ -1,118 +1,78 @@
-# xsukax KML/KMZ Map Viewer
+# notsure KML/KMZ Map Viewer
 
-## 🗺️ Project Overview
+## 🗺️ Descripción del Proyecto
 
-The **xsukax KML/KMZ Map Viewer** is a professional geospatial web application designed for interactive visualization of **KML** and **KMZ** files directly within the browser. Built using **Leaflet**, **Bootstrap 5**, and **OpenStreetMap**, this tool enables users to seamlessly upload and render geospatial data layers without requiring any server-side processing or installations.
+**notsure KML/KMZ Map Viewer** es una aplicación web geoespacial para la visualización interactiva de archivos **KML** y **KMZ** directamente en el navegador. Construida con **Leaflet**, **Bootstrap 5** y **OpenStreetMap** como base cartográfica, sin dependencia de Google Maps.
 
-Users can upload `.kml` or `.kmz` files through an intuitive drag-and-drop interface, instantly visualize geographic features, and explore metadata interactively through dynamic popups and tooltips. The project emphasizes simplicity, responsiveness, and high-quality map rendering — ideal for GIS professionals, analysts, and developers needing a quick and secure way to preview geospatial datasets.
+Este proyecto se desarrolla **en paralelo** como una rama independiente, tomando como punto de partida el trabajo original de [xsukax/xsukax-KML-KMZ-Map-Viewer](https://github.com/xsukax/xsukax-KML-KMZ-Map-Viewer). El crédito por la arquitectura base y el diseño inicial corresponde a **xsukax**.
 
----
-
-## 🔒 Security and Privacy Benefits
-
-The **xsukax KML/KMZ Map Viewer** prioritizes user privacy and data security through several deliberate architectural decisions:
-
-* **Client-Side Data Processing:** All file parsing and visualization occur locally in the user’s browser. Uploaded files are never transmitted to a remote server, ensuring full **data confidentiality**.
-* **No External Storage:** Files remain in local memory during the session and are cleared upon page refresh or when the **“Clear Map”** button is used.
-* **Open-Source Transparency:** Users can inspect and verify the source code to ensure no hidden data collection or external dependencies compromise privacy.
-* **Secure Dependencies:** The project leverages well-maintained and trusted libraries like **Leaflet**, **JSZip**, and **toGeoJSON**, all loaded over **HTTPS** from reliable CDNs.
-
-This privacy-by-design approach ensures the application is safe for viewing sensitive or proprietary geographic data.
+El mapa se inicializa por defecto en **Río Gallegos, Santa Cruz, Argentina**.
 
 ---
 
-## ⚙️ Features and Advantages
+## 🙏 Basado en
 
-* **Instant Map Rendering:** Upload `.kml` or `.kmz` files to visualize geospatial layers instantly.
-* **KMZ Extraction:** Integrated **JSZip** engine automatically extracts embedded KML files from KMZ archives.
-* **Interactive Map Elements:** Features include tooltips, popups, and highlighted geometries for enhanced clarity.
-* **Responsive and Modern UI:** Built with **Bootstrap 5** and **Animate.css** for smooth transitions and professional design.
-* **Offline Operation:** Fully functional without network connectivity after initial load.
-* **One-Click Clearing:** Users can remove loaded layers instantly via the **“Clear Map”** control.
-* **Data Integrity Indicators:** Visual and textual status feedback ensures clear user interaction.
-* **Custom Styling:** Automatic color styling of map features with thematic consistency.
+Este proyecto está basado en:
 
-These advantages make xsukax KML/KMZ Map Viewer a versatile and efficient solution for GIS data visualization in browser-based workflows.
+> **[xsukax/xsukax-KML-KMZ-Map-Viewer](https://github.com/xsukax/xsukax-KML-KMZ-Map-Viewer)**
+> por [xsukax](https://github.com/xsukax) — Licencia GPL-3.0
+
+notsure es un fork independiente que mantiene la misma filosofía: 100% client-side, sin backend, sin rastreo.
 
 ---
 
-## 💻 Installation Instructions
+## 🔒 Privacidad y Seguridad
 
-### Prerequisites
-
-* Any modern web browser (Chrome, Edge, Firefox, Safari)
-* Internet connection (for loading library dependencies via CDN)
-
-### Steps
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/xsukax/xsukax-KML-KMZ-Map-Viewer.git
-   ```
-2. **Navigate to the project directory:**
-
-   ```bash
-   cd xsukax-KML-KMZ-Map-Viewer
-   ```
-3. **Open the application:**
-   Simply open the `index.html` file in your browser.
-
-   ```bash
-   open index.html
-   ```
-
-No build process or backend setup is required — the application runs natively in the browser.
+* **Procesamiento local:** Los archivos nunca se envían a ningún servidor.
+* **Sin almacenamiento externo:** Los datos permanecen en memoria local durante la sesión.
+* **Código abierto:** Auditable en su totalidad.
+* **Dependencias confiables:** Leaflet, JSZip y toGeoJSON, cargados por HTTPS desde CDNs oficiales.
 
 ---
 
-## 🚀 Usage Guide
+## ⚙️ Características
 
-1. **Launch the Viewer:** Open `index.html` in your browser.
-2. **Upload File:** Click the **“Select KML/KMZ File”** button or drag and drop a `.kml` or `.kmz` file into the upload area.
-3. **Visualize Data:** The map will automatically render your features with distinct styles and labels.
-4. **Inspect Features:** Click any feature on the map to view metadata in a popup.
-5. **Clear Map:** Click the **“Clear Map”** button to remove all layers and reset the interface.
+* Visualización instantánea de `.kml` y `.kmz`
+* Extracción automática de KML desde archivos KMZ (via JSZip)
+* Tooltips, popups e inspección de metadatos por feature
+* UI responsiva con Bootstrap 5 y Animate.css
+* Mapa base: OpenStreetMap (sin Google Maps)
+* Un solo archivo `index.html` — sin build, sin dependencias locales
 
-### 🧭 Process Flow (Mermaid Diagram)
+---
 
-```mermaid
-graph TD
-A[User selects .kml or .kmz file] --> B{File Type?}
-B -->|KML| C[Parse KML → Convert to GeoJSON]
-B -->|KMZ| D[Extract KML with JSZip → Parse → Convert]
-C --> E[Render on Leaflet Map]
-D --> E[Render on Leaflet Map]
-E --> F[Display Popups, Tooltips, and Layers]
-F --> G[User Interaction: Zoom, Pan, Inspect]
-G --> H[Optionally Clear Map]
-```
+## 💻 Instalación
 
-### Example Workflow
-
-```text
-1. Select File → my_data.kmz
-2. App extracts KML → converts to GeoJSON → displays map layers
-3. User clicks feature → popup shows metadata
-4. Click “Clear Map” → reset view
+```bash
+git clone https://github.com/nitsugaone/notsure-KML-KMZ-Map-Viewer.git
+cd notsure-KML-KMZ-Map-Viewer
+open index.html
 ```
 
 ---
 
-## 🧾 Licensing Information
+## 🚀 Uso
 
-This project is licensed under the **GNU General Public License v3.0**.
-
----
-
-### 🌍 Repository
-
-GitHub: [xsukax/xsukax-KML-KMZ-Map-Viewer](https://github.com/xsukax/xsukax-KML-KMZ-Map-Viewer)
+1. Abrir `index.html` en el navegador (o acceder via GitHub Pages)
+2. Hacer clic en **"Select KML/KMZ File"** o arrastrar el archivo
+3. El mapa renderiza los features automáticamente
+4. Hacer clic en cualquier feature para ver sus metadatos
+5. **"Clear Map"** para limpiar y reiniciar
 
 ---
 
-### 💡 Author
+## 🌍 Demo
 
-**xsukax** — Creator and maintainer of the xsukax KML/KMZ Map Viewer.
+[https://nitsugaone.github.io/notsure-KML-KMZ-Map-Viewer/](https://nitsugaone.github.io/notsure-KML-KMZ-Map-Viewer/)
 
-Contributions and feedback are welcome! Feel free to open issues or pull requests to enhance functionality or improve documentation.
+---
+
+## 🧾 Licencia
+
+GPL-3.0 — ver [LICENSE](./LICENSE)
+
+---
+
+## 👤 Autor
+
+**nitsugaone** — [OpenStreetMap](https://www.openstreetmap.org/user/nitsugaone) · [GitHub](https://github.com/nitsugaone)

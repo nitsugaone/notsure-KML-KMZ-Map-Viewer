@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xsukax KML/KMZ Map Viewer</title>
+    <title>notsure KML/KMZ Map Viewer</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
@@ -61,7 +61,7 @@
         <div class="container">
             <div class="brand-logo">
                 <i class="fas fa-map-marked-alt"></i>
-                <span class="brand-accent">xsukax</span> KML/KMZ Map Viewer
+                <span class="brand-accent">notsure</span> KML/KMZ Map Viewer
             </div>
             <div class="subtitle">
                 <i class="fas fa-layer-group"></i> Professional Geospatial Mapping Solution
@@ -118,7 +118,11 @@
 
     <!-- Footer -->
     <div class="footer-note">
-        Powered by <a href="#" target="_blank">xsukax</a> | Built with Leaflet & OpenStreetMap
+        <strong>notsure</strong> KML/KMZ Map Viewer — developed in parallel, based on
+        <a href="https://github.com/xsukax/xsukax-KML-KMZ-Map-Viewer" target="_blank">xsukax/xsukax-KML-KMZ-Map-Viewer</a>
+        &nbsp;|&nbsp; Built with <a href="https://leafletjs.com" target="_blank">Leaflet</a> &amp;
+        <a href="https://www.openstreetmap.org" target="_blank">OpenStreetMap</a>
+        &nbsp;|&nbsp; <a href="https://www.openstreetmap.org/user/nitsugaone" target="_blank">nitsugaone @ OSM</a>
     </div>
 
     <!-- Leaflet JS -->
@@ -131,10 +135,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
 
     <script>
-        const map = L.map('map').setView([39.8283, -98.5795], 4);
+        const map = L.map('map').setView([-51.62038256588755, -69.22341147299332], 12);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | <a href="https://www.openstreetmap.org/user/nitsugaone" target="_blank">nitsugaone @ OSM</a>',
             maxZoom: 19
         }).addTo(map);
 
@@ -316,7 +320,7 @@
 
         clearBtn.addEventListener('click', clearMap);
         
-        console.log('xsukax KML/KMZ Map Viewer initialized successfully');
+        console.log('notsure KML/KMZ Map Viewer initialized successfully');
     </script>
 </body>
 </html>
