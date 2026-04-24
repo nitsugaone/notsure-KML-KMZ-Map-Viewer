@@ -67,16 +67,7 @@
         #layerChip.show { display:inline-flex; }
         #layerChip:hover { background:rgba(109,40,217,.55); }
 
-        /* ── Selector de mapa base ── */
-        #basemapBtn {
-            display:inline-flex; align-items:center; gap:6px; padding:5px 11px;
-            background:rgba(255,255,255,.1); color:#e2e8f0;
-            border-radius:7px; border:1px solid rgba(255,255,255,.18);
-            cursor:pointer; font-size:.78rem; font-weight:600; white-space:nowrap;
-            transition:background .2s;
-        }
-        #basemapBtn:hover { background:rgba(255,255,255,.18); }
-        #basemapBtn .flag { font-size:.85rem; }
+
 
         /* ── Mapa ── */
         body { display:flex; flex-direction:column; }
@@ -205,7 +196,6 @@
     <div id="filesChip"><i class="fas fa-files"></i><span id="filesChipText"></span></div>
     <div id="statusChip"></div>
     <div id="layerChip" title="Capas"><i class="fas fa-layer-group"></i><span id="layerChipText">0 capas</span></div>
-    <button id="basemapBtn" title="Cambiar mapa base"><span class="flag" id="basemapFlag">🌐</span><span id="basemapLabel">OSM</span></button>
 </div>
 
 <!-- ── Mapa ── -->
@@ -313,53 +303,15 @@ async function decryptToURL(encBuf, mimeType) {
 const map = L.map('map', { preferCanvas:true })
              .setView([-51.62038256588755, -69.22341147299332], 12);
 
-// ── Mapas base disponibles ──
-const basemaps = {
-    osm: {
-        label: 'OSM',
-        flag:  '🌐',
-        layer: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="https://www.openstreetmap.org/user/nitsugaone">nitsugaone</a>',
-            maxZoom: 19
-        })
-    },
-    ign: {
-        label: 'IGN Argentina',
-        flag:  '🇦🇷',
-        layer: L.tileLayer(
-            'https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{y}.png',
-            {
-                attribution: '© <a href="https://www.ign.gob.ar">IGN Argentina</a> | <a href="https://www.openstreetmap.org/user/nitsugaone">nitsugaone</a>',
-                maxZoom: 18,
-                tms: true   // IGN usa TMS (Y invertido)
-            }
-        )
+// ── Mapa base: IGN Argentina (cartografía oficial — Islas Malvinas) ──
+L.tileLayer(
+    'https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{y}.png',
+    {
+        attribution: '© <a href="https://www.ign.gob.ar">IGN Argentina</a> | <a href="https://www.openstreetmap.org/user/nitsugaone">nitsugaone</a>',
+        maxZoom: 18,
+        tms: true
     }
-};
-
-let currentBasemap = 'ign';   // IGN por defecto — Islas Malvinas correctas
-basemaps.ign.layer.addTo(map);
-
-// Botón de cambio de mapa base
-const basemapBtn   = document.getElementById('basemapBtn');
-const basemapFlag  = document.getElementById('basemapFlag');
-const basemapLabel = document.getElementById('basemapLabel');
-
-// Inicializar label con el default
-basemapFlag.textContent  = basemaps[currentBasemap].flag;
-basemapLabel.textContent = basemaps[currentBasemap].label;
-
-basemapBtn.addEventListener('click', () => {
-    const keys    = Object.keys(basemaps);
-    const nextKey = keys[(keys.indexOf(currentBasemap) + 1) % keys.length];
-    map.removeLayer(basemaps[currentBasemap].layer);
-    basemaps[nextKey].layer.addTo(map);
-    // Asegurar que el basemap quede debajo de los overlays
-    basemaps[nextKey].layer.bringToBack();
-    currentBasemap = nextKey;
-    basemapFlag.textContent  = basemaps[nextKey].flag;
-    basemapLabel.textContent = basemaps[nextKey].label;
-});
+).addTo(map);
 
 function resizeMap() {
     document.getElementById('map-wrap').style.height = (window.innerHeight - document.getElementById('topbar').offsetHeight) + 'px';
