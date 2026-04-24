@@ -30,6 +30,15 @@
         #fileLabel:hover { background:#6d28d9; transform:translateY(-1px); }
         #fileInput { display:none; }
 
+        /* ── Indicador de archivos cargados ── */
+        #filesChip {
+            display:none; align-items:center; gap:5px; padding:4px 10px;
+            background:rgba(16,185,129,.15); color:#6ee7b7;
+            border-radius:20px; font-size:.77rem; font-weight:600;
+            border:1px solid rgba(16,185,129,.25); white-space:nowrap;
+        }
+        #filesChip.show { display:inline-flex; }
+
         #clearBtn {
             display:none; align-items:center; gap:6px; padding:6px 13px;
             background:#dc2626; color:#fff; border-radius:7px; border:none;
@@ -179,9 +188,10 @@
 <div id="topbar">
     <div class="brand"><i class="fas fa-map-marked-alt"></i> <span>notsure</span> KML/KMZ</div>
     <div class="sep"></div>
-    <input type="file" id="fileInput" accept=".kml,.kmz">
+    <input type="file" id="fileInput" accept=".kml,.kmz" multiple>
     <label for="fileInput" id="fileLabel"><i class="fas fa-folder-open"></i> Abrir archivo</label>
     <button id="clearBtn"><i class="fas fa-times"></i> Limpiar</button>
+    <div id="filesChip"><i class="fas fa-files"></i><span id="filesChipText"></span></div>
     <div id="statusChip"></div>
     <div id="layerChip" title="Capas"><i class="fas fa-layer-group"></i><span id="layerChipText">0 capas</span></div>
 </div>
@@ -208,6 +218,7 @@
         <div class="pm-sub">
             Los datos del archivo se cifran en memoria con <code>AES-GCM-256</code> + <code>PBKDF2-SHA-256</code>
             (310 000 iteraciones). Nada sale del dispositivo sin cifrar.<br><br>
+            La misma clave aplica a todos los archivos de esta carga.
             Ingresá una frase de paso o dejá vacío para continuar sin cifrado.
         </div>
         <input type="password" class="pm-input" id="pmInput" placeholder="Frase de paso (opcional)" autocomplete="off">
@@ -308,9 +319,12 @@ resizeMap();
 // ═══════════════════════════════════
 let groups = {};
 
-const fileInput   = document.getElementById('fileInput');
-const statusChip  = document.getElementById('statusChip');
-const clearBtn    = document.getElementById('clearBtn');
+const fileInput    = document.getElementById('fileInput');
+const statusChip   = document.getElementById('statusChip');
+const clearBtn     = document.getElementById('clearBtn');
+const filesChip    = document.getElementById('filesChip');
+const filesChipTx  = document.getElementById('filesChipText');
+let   loadedFiles  = [];   // lista de nombres de archivos cargados
 const layerPanel  = document.getElementById('layerPanel');
 const layerList   = document.getElementById('layerList');
 const layerChip   = document.getElementById('layerChip');
@@ -341,17 +355,17 @@ function showModal() {
 }
 function hideModal() { modal.classList.remove('show'); }
 
-let pendingFile = null;
+let pendingFiles = [];   // FileList → Array
 
 pmOk.addEventListener('click', async () => {
     await initCrypto(pmInput.value.trim());
     hideModal();
-    if (pendingFile) processFile(pendingFile);
+    processFiles(pendingFiles);
 });
 pmSkip.addEventListener('click', () => {
     sessionKey = null;
     hideModal();
-    if (pendingFile) processFile(pendingFile);
+    processFiles(pendingFiles);
 });
 
 // ── Geocoder ──
@@ -395,6 +409,7 @@ function clearMap() {
         )
     );
     groups = {};
+    loadedFiles = [];
     geoQueue.length = 0;
     sessionKey = null;
     statusChip.className = '';
@@ -402,8 +417,16 @@ function clearMap() {
     fileInput.value = '';
     layerPanel.classList.remove('show');
     layerChip.classList.remove('show');
+    filesChip.classList.remove('show');
     layerList.innerHTML = '';
     lockBadge.style.display = 'none';
+}
+
+function updateFilesChip() {
+    if (!loadedFiles.length) { filesChip.classList.remove('show'); return; }
+    filesChipTx.textContent = loadedFiles.length + ' archivo' + (loadedFiles.length !== 1 ? 's' : '');
+    filesChip.setAttribute('title', loadedFiles.join('\n'));
+    filesChip.classList.add('show');
 }
 clearBtn.addEventListener('click', clearMap);
 layerChip.addEventListener('click', () => layerPanel.classList.toggle('show'));
@@ -651,62 +674,75 @@ function scheduleRebuild() {
 //  ENTRY POINT
 // ═══════════════════════════════════
 fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const fname = file.name.toLowerCase();
-    if (!fname.endsWith('.kml') && !fname.endsWith('.kmz')) {
-        showStatus('Formato no válido (.kml/.kmz)', 'error');
-        fileInput.value=''; return;
-    }
-    pendingFile = file;
+    const files = Array.from(e.target.files).filter(f => {
+        const n = f.name.toLowerCase();
+        return n.endsWith('.kml') || n.endsWith('.kmz');
+    });
+    if (!files.length) { showStatus('No se encontraron archivos .kml/.kmz válidos', 'error'); fileInput.value=''; return; }
+    pendingFiles = files;
     showModal();
 });
 
-async function processFile(file) {
-    clearMap();
-    const fname = file.name.toLowerCase();
-    showStatus('Cargando…', 'info');
-    try {
-        if (fname.endsWith('.kmz')) {
-            const zip      = new JSZip();
-            const contents = await zip.loadAsync(file);
-            const zipFiles = contents.files;
-            let rootKml = zipFiles['doc.kml'] || zipFiles['index.kml'];
-            if (!rootKml) for (const [n,f] of Object.entries(zipFiles)) if (!f.dir&&n.endsWith('.kml')&&!n.includes('/')) { rootKml=f; break; }
-            if (!rootKml) throw new Error('No se encontró KML raíz');
-            await parseKMLDocument(await rootKml.async('text'), zipFiles, '', null);
-        } else {
-            await parseKMLDocument(await file.text(), {}, '', null);
-        }
+async function processFiles(files) {
+    // NO limpia — acumula sobre lo ya cargado
+    if (!files.length) return;
 
-        if (!Object.keys(groups).length) { showStatus('Sin datos visualizables', 'error'); return; }
+    showStatus(`Cargando ${files.length} archivo${files.length>1?'s':''}…`, 'info');
 
-        // Ajustar vista
+    let errCount = 0;
+    for (const file of files) {
         try {
-            let combined = null;
-            Object.values(groups).forEach(g =>
-                Object.values(g.subgroups).flat().forEach(it => {
-                    const b = L.latLngBounds([[it.south,it.west],[it.north,it.east]]);
-                    combined = combined ? combined.extend(b) : b;
-                })
-            );
-            if (combined) map.fitBounds(combined, {padding:[40,40]});
-        } catch(_) {}
+            await processSingleFile(file);
+            loadedFiles.push(file.name);
+        } catch(err) {
+            errCount++;
+            console.error(`Error en ${file.name}:`, err);
+        }
+    }
 
-        const enc = sessionKey ? ' · 🔒 AES-256' : '';
-        showStatus('Capas listas — desactivadas por defecto' + enc, 'success');
+    if (!Object.keys(groups).length) { showStatus('Sin datos visualizables', 'error'); return; }
 
-        rebuildPanel();
-        layerPanel.classList.add('show');
-        clearBtn.classList.add('visible');
-        if (sessionKey) lockBadge.style.display='inline';
+    // Ajustar vista al total acumulado
+    try {
+        let combined = null;
+        Object.values(groups).forEach(g =>
+            Object.values(g.subgroups).flat().forEach(it => {
+                const b = L.latLngBounds([[it.south,it.west],[it.north,it.east]]);
+                combined = combined ? combined.extend(b) : b;
+            })
+        );
+        if (combined) map.fitBounds(combined, {padding:[40,40]});
+    } catch(_) {}
 
-        // Iniciar geocodificación asíncrona
-        geocodeAllItems();
+    const enc  = sessionKey ? ' · 🔒 AES-256' : '';
+    const warn = errCount   ? ` (${errCount} con error)` : '';
+    showStatus(`Listo${warn} — capas desactivadas por defecto${enc}`, 'success');
 
-    } catch(err) {
-        showStatus('Error: '+err.message, 'error');
-        console.error(err);
+    updateFilesChip();
+    rebuildPanel();
+    layerPanel.classList.add('show');
+    clearBtn.classList.add('visible');
+    if (sessionKey) lockBadge.style.display='inline';
+    geocodeAllItems();
+
+    fileInput.value = '';   // permite volver a seleccionar los mismos archivos
+}
+
+async function processSingleFile(file) {
+    const fname = file.name.toLowerCase();
+    if (fname.endsWith('.kmz')) {
+        const zip      = new JSZip();
+        const contents = await zip.loadAsync(file);
+        const zipFiles = contents.files;
+        let rootKml = zipFiles['doc.kml'] || zipFiles['index.kml'];
+        if (!rootKml) for (const [n,f] of Object.entries(zipFiles)) if (!f.dir&&n.endsWith('.kml')&&!n.includes('/')) { rootKml=f; break; }
+        if (!rootKml) throw new Error(`No se encontró KML raíz en ${file.name}`);
+        // Usar el nombre del archivo como grupo raíz para diferenciarlo
+        const groupHint = file.name.replace(/\.kmz$/i,'');
+        await parseKMLDocument(await rootKml.async('text'), zipFiles, '', groupHint);
+    } else {
+        const groupHint = file.name.replace(/\.kml$/i,'');
+        await parseKMLDocument(await file.text(), {}, '', groupHint);
     }
 }
 
