@@ -9,135 +9,173 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; }
-        html, body { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #111827; }
+        html, body { margin:0; padding:0; height:100%; font-family:'Segoe UI',sans-serif; background:#111827; }
 
         /* ── Topbar ── */
         #topbar {
-            display: flex; align-items: center; gap: 10px;
-            padding: 8px 14px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 55%, #6d28d9 100%);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
-            flex-wrap: wrap; min-height: 52px;
+            display:flex; align-items:center; gap:10px; padding:8px 14px;
+            background:linear-gradient(135deg,#1e3c72 0%,#2a5298 55%,#6d28d9 100%);
+            box-shadow:0 2px 10px rgba(0,0,0,.4); flex-wrap:wrap; min-height:52px;
         }
-        .brand { font-size: 1.05rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; white-space: nowrap; margin-right: 4px; }
-        .brand span { color: #fbbf24; }
-        .sep { width: 1px; height: 24px; background: rgba(255,255,255,0.25); margin: 0 2px; }
+        .brand { font-size:1.05rem; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:#fff; white-space:nowrap; }
+        .brand span { color:#fbbf24; }
+        .sep { width:1px; height:24px; background:rgba(255,255,255,.25); margin:0 2px; }
 
         #fileLabel {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 14px; background: #7c3aed; color: #fff;
-            border-radius: 7px; cursor: pointer; font-size: 0.82rem; font-weight: 600;
-            border: none; white-space: nowrap; transition: background .2s, transform .15s;
+            display:inline-flex; align-items:center; gap:6px; padding:6px 14px;
+            background:#7c3aed; color:#fff; border-radius:7px; cursor:pointer;
+            font-size:.82rem; font-weight:600; border:none; white-space:nowrap;
+            transition:background .2s,transform .15s;
         }
-        #fileLabel:hover { background: #6d28d9; transform: translateY(-1px); }
-        #fileInput { display: none; }
+        #fileLabel:hover { background:#6d28d9; transform:translateY(-1px); }
+        #fileInput { display:none; }
 
         #clearBtn {
-            display: none; align-items: center; gap: 6px;
-            padding: 6px 13px; background: #dc2626; color: #fff;
-            border-radius: 7px; border: none; cursor: pointer;
-            font-size: 0.82rem; font-weight: 600; white-space: nowrap;
-            transition: background .2s, transform .15s;
+            display:none; align-items:center; gap:6px; padding:6px 13px;
+            background:#dc2626; color:#fff; border-radius:7px; border:none;
+            cursor:pointer; font-size:.82rem; font-weight:600; white-space:nowrap;
+            transition:background .2s,transform .15s;
         }
-        #clearBtn.visible { display: inline-flex; }
-        #clearBtn:hover { background: #b91c1c; transform: translateY(-1px); }
+        #clearBtn.visible { display:inline-flex; }
+        #clearBtn:hover { background:#b91c1c; transform:translateY(-1px); }
 
         #statusChip {
-            display: none; align-items: center; gap: 6px;
-            padding: 5px 12px; border-radius: 20px;
-            font-size: 0.8rem; font-weight: 600; white-space: nowrap;
+            display:none; align-items:center; gap:6px; padding:5px 12px;
+            border-radius:20px; font-size:.8rem; font-weight:600; white-space:nowrap;
         }
-        #statusChip.show { display: inline-flex; }
-        #statusChip.s-info    { background: rgba(59,130,246,.25); color: #bfdbfe; }
-        #statusChip.s-success { background: rgba(16,185,129,.25); color: #a7f3d0; }
-        #statusChip.s-error   { background: rgba(239,68,68,.25);  color: #fca5a5; }
+        #statusChip.show { display:inline-flex; }
+        #statusChip.s-info    { background:rgba(59,130,246,.25);  color:#bfdbfe; }
+        #statusChip.s-success { background:rgba(16,185,129,.25);  color:#a7f3d0; }
+        #statusChip.s-error   { background:rgba(239,68,68,.25);   color:#fca5a5; }
+        #statusChip.s-lock    { background:rgba(251,191,36,.2);   color:#fde68a; }
 
         #layerChip {
-            display: none; align-items: center; gap: 6px;
-            padding: 5px 12px; background: rgba(109,40,217,.35); color: #e9d5ff;
-            border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-            cursor: pointer; white-space: nowrap;
-            border: 1px solid rgba(139,92,246,.4); transition: background .2s;
+            display:none; align-items:center; gap:6px; padding:5px 12px;
+            background:rgba(109,40,217,.35); color:#e9d5ff; border-radius:20px;
+            font-size:.8rem; font-weight:600; cursor:pointer; white-space:nowrap;
+            border:1px solid rgba(139,92,246,.4); transition:background .2s;
         }
-        #layerChip.show { display: inline-flex; }
-        #layerChip:hover { background: rgba(109,40,217,.55); }
+        #layerChip.show { display:inline-flex; }
+        #layerChip:hover { background:rgba(109,40,217,.55); }
 
         /* ── Mapa ── */
-        #map-wrap { position: relative; flex: 1; }
-        #map { position: absolute; top:0; left:0; right:0; bottom:0; }
-        body { display: flex; flex-direction: column; }
+        body { display:flex; flex-direction:column; }
+        #map-wrap { position:relative; flex:1; }
+        #map { position:absolute; top:0; left:0; right:0; bottom:0; }
 
         /* ── Panel de capas ── */
         #layerPanel {
-            position: absolute; top: 10px; right: 10px; z-index: 800;
-            background: rgba(17,24,39,.94); backdrop-filter: blur(8px);
-            border: 1px solid rgba(139,92,246,.35); border-radius: 10px;
-            padding: 10px 12px; width: 270px;
-            max-height: calc(100vh - 80px); overflow-y: auto;
-            display: none; color: #f3f4f6; font-size: 0.81rem;
+            position:absolute; top:10px; right:10px; z-index:800;
+            background:rgba(17,24,39,.95); backdrop-filter:blur(10px);
+            border:1px solid rgba(139,92,246,.35); border-radius:10px;
+            padding:10px 12px; width:275px;
+            max-height:calc(100vh - 80px); overflow-y:auto;
+            display:none; color:#f3f4f6; font-size:.81rem;
         }
-        #layerPanel.show { display: block; }
-        #layerPanel::-webkit-scrollbar { width: 4px; }
-        #layerPanel::-webkit-scrollbar-thumb { background: #6d28d9; border-radius: 4px; }
+        #layerPanel.show { display:block; }
+        #layerPanel::-webkit-scrollbar { width:4px; }
+        #layerPanel::-webkit-scrollbar-thumb { background:#6d28d9; border-radius:4px; }
 
         .lp-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 8px; font-size: 0.74rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: .8px; color: #a78bfa;
+            display:flex; align-items:center; justify-content:space-between;
+            margin-bottom:8px; font-size:.74rem; font-weight:700;
+            text-transform:uppercase; letter-spacing:.8px; color:#a78bfa;
         }
+        .lp-header-left { display:flex; align-items:center; gap:6px; }
+        .lock-badge { font-size:.65rem; background:rgba(251,191,36,.2); color:#fde68a; padding:2px 6px; border-radius:4px; border:1px solid rgba(251,191,36,.3); }
         .lp-close { background:none; border:none; color:#6b7280; cursor:pointer; font-size:.9rem; padding:0; transition:color .15s; }
         .lp-close:hover { color:#f9fafb; }
 
-        /* Grupo */
-        .lp-group { border: 1px solid rgba(139,92,246,.2); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
-
+        /* Grupo principal */
+        .lp-group { border:1px solid rgba(139,92,246,.2); border-radius:8px; margin-bottom:8px; overflow:hidden; }
         .lp-group-header {
-            display: flex; align-items: center; gap: 7px;
-            padding: 6px 9px; background: rgba(109,40,217,.25);
-            cursor: pointer; user-select: none;
+            display:flex; align-items:center; gap:7px; padding:6px 9px;
+            background:rgba(109,40,217,.25); cursor:pointer; user-select:none;
         }
-        .lp-group-toggle { background:none; border:none; color:#a78bfa; padding:0; font-size:.72rem; line-height:1; flex-shrink:0; cursor:pointer; transition: transform .2s; }
-        .lp-group-toggle.open { transform: rotate(90deg); }
-        .lp-group-cb { accent-color:#a78bfa; flex-shrink:0; cursor:pointer; }
-        .lp-group-label { flex:1; font-weight:700; font-size:0.82rem; color:#e9d5ff; }
-        .lp-count { font-size:.71rem; color:#9ca3af; }
+        .lp-arrow { background:none; border:none; color:#a78bfa; padding:0; font-size:.72rem; line-height:1; flex-shrink:0; cursor:pointer; transition:transform .2s; }
+        .lp-arrow.open { transform:rotate(90deg); }
+        .lp-cb { accent-color:#a78bfa; flex-shrink:0; cursor:pointer; }
+        .lp-group-label { flex:1; font-weight:700; font-size:.82rem; color:#e9d5ff; }
+        .lp-count { font-size:.7rem; color:#9ca3af; }
 
-        /* Slider de grupo */
-        .lp-group-body { padding: 6px 9px 7px; border-top: 1px solid rgba(139,92,246,.1); }
+        .lp-group-body { padding:6px 9px 7px; border-top:1px solid rgba(139,92,246,.1); }
         .lp-opacity { display:flex; align-items:center; gap:6px; }
         .lp-opacity label { font-size:.72rem; color:#9ca3af; white-space:nowrap; }
         .lp-opacity input[type=range] { flex:1; accent-color:#7c3aed; height:3px; cursor:pointer; }
         .lp-opacity span { font-size:.72rem; color:#d1d5db; min-width:28px; text-align:right; }
 
-        /* Lista individual de overlays */
-        .lp-items { padding: 4px 9px 6px; border-top: 1px solid rgba(139,92,246,.08); display:none; }
-        .lp-items.open { display: block; }
+        /* Subgrupos por localidad */
+        .lp-subgroups { display:none; }
+        .lp-subgroups.open { display:block; }
 
+        .lp-subgroup { margin:4px 6px 4px 6px; border:1px solid rgba(139,92,246,.12); border-radius:6px; overflow:hidden; }
+        .lp-subgroup-header {
+            display:flex; align-items:center; gap:6px; padding:4px 8px;
+            background:rgba(79,30,157,.2); cursor:pointer; user-select:none;
+        }
+        .lp-sg-arrow { background:none; border:none; color:#7c3aed; padding:0; font-size:.68rem; line-height:1; flex-shrink:0; cursor:pointer; transition:transform .2s; }
+        .lp-sg-arrow.open { transform:rotate(90deg); }
+        .lp-sg-cb { accent-color:#7c3aed; flex-shrink:0; cursor:pointer; }
+        .lp-sg-label { flex:1; font-size:.78rem; font-weight:600; color:#c4b5fd; }
+        .lp-sg-count { font-size:.68rem; color:#6b7280; }
+
+        /* Items individuales */
+        .lp-items { display:none; padding:3px 6px 5px 6px; }
+        .lp-items.open { display:block; }
         .lp-item {
-            display: flex; align-items: flex-start; gap: 6px;
-            padding: 4px 2px; border-bottom: 1px solid rgba(255,255,255,.04);
+            display:flex; align-items:flex-start; gap:5px; padding:3px 2px;
+            border-bottom:1px solid rgba(255,255,255,.03);
         }
-        .lp-item:last-child { border-bottom: none; }
+        .lp-item:last-child { border-bottom:none; }
         .lp-item input[type=checkbox] { accent-color:#a78bfa; margin-top:2px; flex-shrink:0; cursor:pointer; }
-        .lp-item-label {
-            font-size: .76rem; color: #d1d5db; line-height: 1.3;
-            word-break: break-word;
-        }
+        .lp-item-label { font-size:.74rem; color:#9ca3af; line-height:1.3; word-break:break-word; }
         .lp-item-label .place { color:#a78bfa; font-style:italic; }
-        .lp-item-label .loading { color:#6b7280; font-size:.7rem; }
+        .lp-item-label .loading { color:#4b5563; font-size:.68rem; }
+        .lp-item-label .idx { color:#6b7280; font-size:.68rem; }
 
         /* Feature label */
-        .feature-label {
-            background:#fff; border:2px solid #7c3aed;
-            padding:3px 8px; border-radius:5px;
-            font-weight:600; font-size:11px; color:#1f2937;
-            box-shadow:0 2px 6px rgba(0,0,0,.2); pointer-events:none;
+        .feature-label { background:#fff; border:2px solid #7c3aed; padding:3px 8px; border-radius:5px; font-weight:600; font-size:11px; color:#1f2937; box-shadow:0 2px 6px rgba(0,0,0,.2); pointer-events:none; }
+
+        /* ── Modal passphrase ── */
+        #passphraseModal {
+            display:none; position:fixed; inset:0; z-index:9999;
+            background:rgba(0,0,0,.7); backdrop-filter:blur(4px);
+            align-items:center; justify-content:center;
         }
+        #passphraseModal.show { display:flex; }
+        .pm-box {
+            background:#1f2937; border:1px solid rgba(139,92,246,.4);
+            border-radius:12px; padding:24px 28px; width:360px; max-width:95vw;
+        }
+        .pm-title { font-size:1rem; font-weight:700; color:#e9d5ff; margin-bottom:4px; }
+        .pm-sub { font-size:.78rem; color:#9ca3af; margin-bottom:16px; line-height:1.5; }
+        .pm-sub code { background:rgba(109,40,217,.25); padding:1px 5px; border-radius:3px; color:#c4b5fd; font-size:.76rem; }
+        .pm-input {
+            width:100%; padding:9px 12px; background:#111827;
+            border:1px solid rgba(139,92,246,.4); border-radius:7px;
+            color:#f3f4f6; font-size:.9rem; outline:none; margin-bottom:12px;
+            transition:border-color .2s;
+        }
+        .pm-input:focus { border-color:#7c3aed; }
+        .pm-strength { height:3px; border-radius:2px; margin-bottom:12px; transition:all .3s; background:#374151; }
+        .pm-strength.w { background:#ef4444; width:25%; }
+        .pm-strength.m { background:#f59e0b; width:55%; }
+        .pm-strength.s { background:#10b981; width:100%; }
+        .pm-hint { font-size:.7rem; color:#6b7280; margin-bottom:14px; }
+        .pm-actions { display:flex; gap:8px; justify-content:flex-end; }
+        .pm-btn {
+            padding:7px 18px; border-radius:7px; border:none; cursor:pointer;
+            font-size:.82rem; font-weight:600; transition:background .2s;
+        }
+        .pm-btn-skip { background:#374151; color:#9ca3af; }
+        .pm-btn-skip:hover { background:#4b5563; }
+        .pm-btn-ok { background:#7c3aed; color:#fff; }
+        .pm-btn-ok:hover { background:#6d28d9; }
     </style>
 </head>
 <body>
 
-<!-- Topbar -->
+<!-- ── Topbar ── -->
 <div id="topbar">
     <div class="brand"><i class="fas fa-map-marked-alt"></i> <span>notsure</span> KML/KMZ</div>
     <div class="sep"></div>
@@ -145,22 +183,40 @@
     <label for="fileInput" id="fileLabel"><i class="fas fa-folder-open"></i> Abrir archivo</label>
     <button id="clearBtn"><i class="fas fa-times"></i> Limpiar</button>
     <div id="statusChip"></div>
-    <div id="layerChip" title="Mostrar/ocultar capas">
-        <i class="fas fa-layer-group"></i>
-        <span id="layerChipText">0 capas</span>
-    </div>
+    <div id="layerChip" title="Capas"><i class="fas fa-layer-group"></i><span id="layerChipText">0 capas</span></div>
 </div>
 
-<!-- Mapa -->
+<!-- ── Mapa ── -->
 <div id="map-wrap">
     <div id="map"></div>
-
     <div id="layerPanel">
         <div class="lp-header">
-            <span><i class="fas fa-layer-group"></i> Capas</span>
+            <div class="lp-header-left">
+                <span><i class="fas fa-layer-group"></i> Capas</span>
+                <span class="lock-badge" id="lockBadge" style="display:none"><i class="fas fa-lock"></i> AES-256</span>
+            </div>
             <button class="lp-close" id="lpClose"><i class="fas fa-times"></i></button>
         </div>
         <div id="layerList"></div>
+    </div>
+</div>
+
+<!-- ── Modal passphrase ── -->
+<div id="passphraseModal">
+    <div class="pm-box">
+        <div class="pm-title"><i class="fas fa-shield-alt"></i> Cifrado AES-GCM-256</div>
+        <div class="pm-sub">
+            Los datos del archivo se cifran en memoria con <code>AES-GCM-256</code> + <code>PBKDF2-SHA-256</code>
+            (310 000 iteraciones). Nada sale del dispositivo sin cifrar.<br><br>
+            Ingresá una frase de paso o dejá vacío para continuar sin cifrado.
+        </div>
+        <input type="password" class="pm-input" id="pmInput" placeholder="Frase de paso (opcional)" autocomplete="off">
+        <div class="pm-strength" id="pmStrength"></div>
+        <div class="pm-hint" id="pmHint">Sin cifrado</div>
+        <div class="pm-actions">
+            <button class="pm-btn pm-btn-skip" id="pmSkip">Sin cifrado</button>
+            <button class="pm-btn pm-btn-ok"   id="pmOk">Continuar</button>
+        </div>
     </div>
 </div>
 
@@ -172,304 +228,366 @@
  * notsure KML/KMZ Map Viewer
  * Desarrollado en paralelo con Computer de Perplexity (https://computer.perplexity.ai)
  * Basado en: xsukax/xsukax-KML-KMZ-Map-Viewer (https://github.com/xsukax/xsukax-KML-KMZ-Map-Viewer)
+ *
+ * Cifrado: AES-GCM-256 (Web Crypto API, nativo del browser)
+ * Derivación de clave: PBKDF2-SHA-256, 310 000 iteraciones (OWASP 2023)
+ * Inspirado en los primitivos de signal-crypto / RustCrypto usados por Signal (libsignal)
  * Licencia: GPL-3.0
  */
 
-// ── Mapa base ──
-const map = L.map('map', { preferCanvas: true })
+// ═══════════════════════════════════
+//  CRYPTO — AES-GCM-256 + PBKDF2
+// ═══════════════════════════════════
+const PBKDF2_ITERS = 310_000;
+const SALT_LEN     = 16;
+const IV_LEN       = 12;
+
+let sessionKey = null; // CryptoKey | null
+
+async function deriveKey(passphrase, salt) {
+    const enc      = new TextEncoder();
+    const keyMat   = await crypto.subtle.importKey('raw', enc.encode(passphrase), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey(
+        { name:'PBKDF2', salt, hash:'SHA-256', iterations: PBKDF2_ITERS },
+        keyMat,
+        { name:'AES-GCM', length:256 },
+        false, ['encrypt','decrypt']
+    );
+}
+
+async function initCrypto(passphrase) {
+    if (!passphrase) { sessionKey = null; return; }
+    const salt   = crypto.getRandomValues(new Uint8Array(SALT_LEN));
+    sessionKey   = await deriveKey(passphrase, salt);
+}
+
+// Cifra un ArrayBuffer → devuelve ArrayBuffer (salt‖iv‖ciphertext)
+async function encryptBlob(buf) {
+    if (!sessionKey) return buf;
+    const salt = crypto.getRandomValues(new Uint8Array(SALT_LEN));
+    const iv   = crypto.getRandomValues(new Uint8Array(IV_LEN));
+    const ct   = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, sessionKey, buf);
+    const out  = new Uint8Array(SALT_LEN + IV_LEN + ct.byteLength);
+    out.set(salt, 0);
+    out.set(iv,   SALT_LEN);
+    out.set(new Uint8Array(ct), SALT_LEN + IV_LEN);
+    return out.buffer;
+}
+
+// Descifra → devuelve Blob URL para usar en imageOverlay
+async function decryptToURL(encBuf, mimeType) {
+    if (!sessionKey) return URL.createObjectURL(new Blob([encBuf], { type: mimeType }));
+    const bytes = new Uint8Array(encBuf);
+    const iv    = bytes.slice(SALT_LEN, SALT_LEN + IV_LEN);
+    const ct    = bytes.slice(SALT_LEN + IV_LEN);
+    const plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv }, sessionKey, ct);
+    return URL.createObjectURL(new Blob([plain], { type: mimeType }));
+}
+
+// ═══════════════════════════════════
+//  MAPA
+// ═══════════════════════════════════
+const map = L.map('map', { preferCanvas:true })
              .setView([-51.62038256588755, -69.22341147299332], 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="https://www.openstreetmap.org/user/nitsugaone">nitsugaone</a>',
-    maxZoom: 19
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="https://www.openstreetmap.org/user/nitsugaone">nitsugaone</a>',
+    maxZoom:19
 }).addTo(map);
 
 function resizeMap() {
-    const topH = document.getElementById('topbar').offsetHeight;
-    document.getElementById('map-wrap').style.height = (window.innerHeight - topH) + 'px';
+    document.getElementById('map-wrap').style.height = (window.innerHeight - document.getElementById('topbar').offsetHeight) + 'px';
     map.invalidateSize();
 }
 window.addEventListener('resize', resizeMap);
 resizeMap();
 
-// ── Estado ──
-// groups: { [groupName]: { items: [{layer, north,south,east,west, visible, labelEl, cbEl}], visible, masterOpacity } }
+// ═══════════════════════════════════
+//  ESTADO
+//  groups → { [groupName]: { subgroups: { [place]: [{encBuf,mimeType,north,south,east,west,opacity,layer,visible,cbEl,labelEl}] }, visible, masterOpacity } }
+// ═══════════════════════════════════
 let groups = {};
 
-const fileInput    = document.getElementById('fileInput');
-const statusChip   = document.getElementById('statusChip');
-const clearBtn     = document.getElementById('clearBtn');
-const layerPanel   = document.getElementById('layerPanel');
-const layerList    = document.getElementById('layerList');
-const layerChip    = document.getElementById('layerChip');
-const layerChipTx  = document.getElementById('layerChipText');
-const lpClose      = document.getElementById('lpClose');
+const fileInput   = document.getElementById('fileInput');
+const statusChip  = document.getElementById('statusChip');
+const clearBtn    = document.getElementById('clearBtn');
+const layerPanel  = document.getElementById('layerPanel');
+const layerList   = document.getElementById('layerList');
+const layerChip   = document.getElementById('layerChip');
+const layerChipTx = document.getElementById('layerChipText');
+const lpClose     = document.getElementById('lpClose');
+const lockBadge   = document.getElementById('lockBadge');
 
-// ── Geocoder cache (Nominatim) ──
+// ── Passphrase modal ──
+const modal   = document.getElementById('passphraseModal');
+const pmInput = document.getElementById('pmInput');
+const pmOk    = document.getElementById('pmOk');
+const pmSkip  = document.getElementById('pmSkip');
+const pmStr   = document.getElementById('pmStrength');
+const pmHint  = document.getElementById('pmHint');
+
+pmInput.addEventListener('input', () => {
+    const v = pmInput.value;
+    if (!v)          { pmStr.className = 'pm-strength'; pmHint.textContent = 'Sin cifrado'; return; }
+    if (v.length < 8){ pmStr.className = 'pm-strength w'; pmHint.textContent = 'Débil — mínimo 8 caracteres'; }
+    else if (v.length < 16){ pmStr.className = 'pm-strength m'; pmHint.textContent = 'Moderada'; }
+    else             { pmStr.className = 'pm-strength s'; pmHint.textContent = 'Fuerte ✓'; }
+});
+
+function showModal() {
+    pmInput.value = ''; pmStr.className = 'pm-strength'; pmHint.textContent = 'Sin cifrado';
+    modal.classList.add('show');
+    setTimeout(() => pmInput.focus(), 50);
+}
+function hideModal() { modal.classList.remove('show'); }
+
+let pendingFile = null;
+
+pmOk.addEventListener('click', async () => {
+    await initCrypto(pmInput.value.trim());
+    hideModal();
+    if (pendingFile) processFile(pendingFile);
+});
+pmSkip.addEventListener('click', () => {
+    sessionKey = null;
+    hideModal();
+    if (pendingFile) processFile(pendingFile);
+});
+
+// ── Geocoder ──
 const geoCache = {};
-const geoQueue = [];   // {lat, lon, callback}
+const geoQueue = [];
 let   geoRunning = false;
 
-// Nominatim rate-limit: 1 req/s
 async function drainGeoQueue() {
     if (geoRunning || !geoQueue.length) return;
     geoRunning = true;
     while (geoQueue.length) {
-        const { lat, lon, callback } = geoQueue.shift();
+        const { lat, lon, cb } = geoQueue.shift();
         const key = `${lat.toFixed(2)},${lon.toFixed(2)}`;
-        if (geoCache[key]) { callback(geoCache[key]); continue; }
+        if (geoCache[key] !== undefined) { cb(geoCache[key]); continue; }
         try {
-            const res  = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=8`,
-                { headers: { 'Accept-Language': 'es' } }
-            );
-            const data = await res.json();
-            const addr = data.address || {};
-            // Prioridad: city → town → village → county → state
-            const place = addr.city || addr.town || addr.village || addr.county || addr.state || '';
-            geoCache[key] = place;
-            callback(place);
-        } catch(_) { callback(''); }
-        if (geoQueue.length) await new Promise(r => setTimeout(r, 1100)); // rate limit
+            const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&zoom=8`, { headers:{'Accept-Language':'es'} });
+            const d = await r.json();
+            const a = d.address || {};
+            const p = a.city || a.town || a.village || a.county || a.state || '';
+            geoCache[key] = p; cb(p);
+        } catch(_) { geoCache[key] = ''; cb(''); }
+        if (geoQueue.length) await new Promise(r => setTimeout(r, 1100));
     }
     geoRunning = false;
 }
 
-function reverseGeocode(lat, lon, callback) {
-    geoQueue.push({ lat, lon, callback });
-    drainGeoQueue();
-}
+function reverseGeocode(lat, lon, cb) { geoQueue.push({lat,lon,cb}); drainGeoQueue(); }
 
 // ── UI helpers ──
 function showStatus(msg, type) {
-    const icons = { info:'fa-spinner fa-spin', success:'fa-check-circle', error:'fa-exclamation-circle' };
-    statusChip.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
+    const icons = { info:'fa-spinner fa-spin', success:'fa-check-circle', error:'fa-exclamation-circle', lock:'fa-lock' };
+    statusChip.innerHTML = `<i class="fas ${icons[type]||'fa-info-circle'}"></i> ${msg}`;
     statusChip.className = `show s-${type}`;
-    if (type === 'success') setTimeout(() => statusChip.classList.remove('show'), 4000);
+    if (type==='success') setTimeout(() => statusChip.classList.remove('show'), 5000);
 }
 
 function clearMap() {
-    Object.values(groups).forEach(g => g.items.forEach(it => map.removeLayer(it.layer)));
+    Object.values(groups).forEach(g =>
+        Object.values(g.subgroups).forEach(items =>
+            items.forEach(it => { if (it.layer) { map.removeLayer(it.layer); it.layer = null; } })
+        )
+    );
     groups = {};
     geoQueue.length = 0;
+    sessionKey = null;
     statusChip.className = '';
     clearBtn.classList.remove('visible');
     fileInput.value = '';
     layerPanel.classList.remove('show');
     layerChip.classList.remove('show');
     layerList.innerHTML = '';
+    lockBadge.style.display = 'none';
 }
 clearBtn.addEventListener('click', clearMap);
 layerChip.addEventListener('click', () => layerPanel.classList.toggle('show'));
-lpClose.addEventListener('click',  () => layerPanel.classList.remove('show'));
+lpClose.addEventListener('click', () => layerPanel.classList.remove('show'));
 
-// ── Agregar overlay a grupo (desactivado por defecto) ──
-function addToGroup(groupName, north, south, east, west, imageUrl, opacity) {
-    if (!groups[groupName]) groups[groupName] = { items:[], visible:false, masterOpacity: opacity };
-    const layer = L.imageOverlay(imageUrl, [[south,west],[north,east]], { opacity: 0, interactive:false });
-    // NO se agrega al mapa — desactivado por defecto
-    groups[groupName].items.push({ layer, north, south, east, west, visible:false, labelEl:null, cbEl:null });
+// ── Agregar overlay (cifrado, desactivado) ──
+async function addToGroup(groupName, north, south, east, west, rawBuf, mimeType, opacity) {
+    if (!groups[groupName]) groups[groupName] = { subgroups:{}, visible:false, masterOpacity:opacity };
+    const encBuf = await encryptBlob(rawBuf);
+    // subgrupo = PENDING hasta que geocoder responda; usamos "?" temporalmente
+    const item = { encBuf, mimeType, north, south, east, west, opacity, layer:null, visible:false, cbEl:null, labelEl:null, place:null };
+    if (!groups[groupName].subgroups['?']) groups[groupName].subgroups['?'] = [];
+    groups[groupName].subgroups['?'].push(item);
 }
 
-// ── Rebuild panel ──
+// Mueve ítems de subgrupo '?' al subgrupo de su localidad (lo llama el geocoder)
+function resolvePlace(groupName, item, place) {
+    item.place = place || '—';
+    const sg = groups[groupName].subgroups;
+    // Quitar de '?'
+    sg['?'] = (sg['?'] || []).filter(i => i !== item);
+    if (!sg['?'].length) delete sg['?'];
+    // Agregar al subgrupo de la localidad
+    if (!sg[item.place]) sg[item.place] = [];
+    sg[item.place].push(item);
+}
+
+// ── Activar/desactivar un item ──
+async function activateItem(item, on, masterOpacity) {
+    if (on) {
+        if (!item.layer) {
+            const url = await decryptToURL(item.encBuf, item.mimeType);
+            item.layer = L.imageOverlay(url, [[item.south,item.west],[item.north,item.east]], { opacity: masterOpacity, interactive:false });
+        }
+        item.layer.setOpacity(masterOpacity);
+        item.layer.addTo(map);
+    } else {
+        if (item.layer) { item.layer.setOpacity(0); map.removeLayer(item.layer); }
+    }
+    item.visible = on;
+}
+
+// ═══════════════════════════════════
+//  PANEL DE CAPAS
+// ═══════════════════════════════════
 function rebuildPanel() {
     layerList.innerHTML = '';
-    const keys = Object.keys(groups);
-    if (!keys.length) { layerPanel.classList.remove('show'); layerChip.classList.remove('show'); return; }
+    const gkeys = Object.keys(groups);
+    if (!gkeys.length) { layerPanel.classList.remove('show'); layerChip.classList.remove('show'); return; }
 
-    // Conteo total de overlays
-    const total = keys.reduce((s,k) => s + groups[k].items.length, 0);
-    layerChipTx.textContent = total + ' capa' + (total !== 1 ? 's' : '');
+    const total = gkeys.reduce((s,k) => s + Object.values(groups[k].subgroups).reduce((ss,arr) => ss+arr.length,0), 0);
+    layerChipTx.textContent = total + ' capa' + (total!==1?'s':'');
     layerChip.classList.add('show');
+    lockBadge.style.display = sessionKey ? 'inline' : 'none';
 
-    keys.forEach(gname => {
+    gkeys.forEach(gname => {
         const g = groups[gname];
+        const gDiv = document.createElement('div'); gDiv.className = 'lp-group';
 
-        const groupDiv = document.createElement('div');
-        groupDiv.className = 'lp-group';
+        // Header grupo
+        const hdr = document.createElement('div'); hdr.className = 'lp-group-header';
+        const garrow = document.createElement('button'); garrow.className = 'lp-arrow'; garrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        const gcb = document.createElement('input'); gcb.type='checkbox'; gcb.className='lp-cb'; gcb.checked=false;
+        const glbl = document.createElement('span'); glbl.className='lp-group-label'; glbl.textContent=gname;
+        const gcnt = document.createElement('span'); gcnt.className='lp-count';
+        gcnt.textContent = Object.values(g.subgroups).reduce((s,a)=>s+a.length,0);
 
-        // ── Header del grupo ──
-        const hdr = document.createElement('div');
-        hdr.className = 'lp-group-header';
-
-        // Flecha toggle de expansión
-        const arrow = document.createElement('button');
-        arrow.className = 'lp-group-toggle';
-        arrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
-
-        // Checkbox de grupo (activa/desactiva todos)
-        const groupCb = document.createElement('input');
-        groupCb.type = 'checkbox'; groupCb.className = 'lp-group-cb';
-        groupCb.checked = false; // desactivado por defecto
-
-        const lbl = document.createElement('span');
-        lbl.className = 'lp-group-label';
-        lbl.textContent = gname;
-
-        const cnt = document.createElement('span');
-        cnt.className = 'lp-count';
-        cnt.textContent = g.items.length;
-
-        // Toggle todos los items del grupo
-        groupCb.addEventListener('change', () => {
-            g.visible = groupCb.checked;
-            g.items.forEach(it => {
-                it.visible = groupCb.checked;
-                if (it.cbEl) it.cbEl.checked = groupCb.checked;
-                if (groupCb.checked) { it.layer.setOpacity(g.masterOpacity); it.layer.addTo(map); }
-                else { it.layer.setOpacity(0); map.removeLayer(it.layer); }
+        gcb.addEventListener('change', () => {
+            Object.values(g.subgroups).flat().forEach(it => {
+                activateItem(it, gcb.checked, g.masterOpacity);
+                if (it.cbEl) it.cbEl.checked = gcb.checked;
             });
+            // subgroup cbs
+            gDiv.querySelectorAll('.lp-sg-cb').forEach(c => c.checked = gcb.checked);
         });
 
-        hdr.appendChild(arrow);
-        hdr.appendChild(groupCb);
-        hdr.appendChild(lbl);
-        hdr.appendChild(cnt);
+        hdr.appendChild(garrow); hdr.appendChild(gcb); hdr.appendChild(glbl); hdr.appendChild(gcnt);
 
-        // ── Body del grupo: slider opacidad ──
-        const body = document.createElement('div');
-        body.className = 'lp-group-body';
-
-        const opRow = document.createElement('div');
-        opRow.className = 'lp-opacity';
-        const opLbl = document.createElement('label'); opLbl.textContent = 'Opacidad';
-        const slider = document.createElement('input');
-        slider.type = 'range'; slider.min = 0; slider.max = 100;
-        slider.value = Math.round(g.masterOpacity * 100);
-        const valSpan = document.createElement('span');
-        valSpan.textContent = slider.value + '%';
-
+        // Body: slider opacidad de grupo
+        const body = document.createElement('div'); body.className='lp-group-body';
+        const opRow = document.createElement('div'); opRow.className='lp-opacity';
+        const opLbl = document.createElement('label'); opLbl.textContent='Opacidad';
+        const slider = document.createElement('input'); slider.type='range'; slider.min=0; slider.max=100; slider.value=Math.round(g.masterOpacity*100);
+        const valSp = document.createElement('span'); valSp.textContent=slider.value+'%';
         slider.addEventListener('input', () => {
-            const op = parseInt(slider.value) / 100;
-            g.masterOpacity = op;
-            valSpan.textContent = slider.value + '%';
-            g.items.forEach(it => { if (it.visible) it.layer.setOpacity(op); });
+            const op = parseInt(slider.value)/100; g.masterOpacity=op; valSp.textContent=slider.value+'%';
+            Object.values(g.subgroups).flat().forEach(it => { if(it.visible && it.layer) it.layer.setOpacity(op); });
         });
-        opRow.appendChild(opLbl); opRow.appendChild(slider); opRow.appendChild(valSpan);
+        opRow.appendChild(opLbl); opRow.appendChild(slider); opRow.appendChild(valSp);
         body.appendChild(opRow);
 
-        // ── Lista individual de overlays ──
-        const itemsDiv = document.createElement('div');
-        itemsDiv.className = 'lp-items';
+        // Subgrupos
+        const sgWrap = document.createElement('div'); sgWrap.className='lp-subgroups';
 
-        g.items.forEach((item, idx) => {
-            const row = document.createElement('div');
-            row.className = 'lp-item';
-
-            const cb = document.createElement('input');
-            cb.type = 'checkbox'; cb.checked = false;
-            item.cbEl = cb;
-
-            cb.addEventListener('change', () => {
-                item.visible = cb.checked;
-                if (cb.checked) { item.layer.setOpacity(g.masterOpacity); item.layer.addTo(map); }
-                else { item.layer.setOpacity(0); map.removeLayer(item.layer); }
-                // Actualizar estado del checkbox de grupo
-                const allChecked  = g.items.every(i => i.visible);
-                const someChecked = g.items.some(i => i.visible);
-                groupCb.checked = allChecked;
-                groupCb.indeterminate = !allChecked && someChecked;
-                g.visible = someChecked;
-            });
-
-            const lblDiv = document.createElement('div');
-            lblDiv.className = 'lp-item-label';
-            item.labelEl = lblDiv;
-
-            // Nombre base + placeholder de localidad
-            const centerLat = (item.north + item.south) / 2;
-            const centerLon = (item.east  + item.west)  / 2;
-
-            lblDiv.innerHTML = `${gname} <span class="loading">(geocodificando…)</span>`;
-
-            // Geocodificación asíncrona
-            reverseGeocode(centerLat, centerLon, place => {
-                if (item.labelEl) {
-                    item.labelEl.innerHTML = place
-                        ? `${gname} <span class="place">(${place})</span>`
-                        : gname;
-                }
-            });
-
-            row.appendChild(cb);
-            row.appendChild(lblDiv);
-            itemsDiv.appendChild(row);
-        });
-
-        // Toggle expansión de la lista
-        let open = false;
-        function toggleItems() {
-            open = !open;
-            arrow.classList.toggle('open', open);
-            itemsDiv.classList.toggle('open', open);
+        function updateGroupCb() {
+            const all = Object.values(g.subgroups).flat();
+            const some = all.some(i=>i.visible), allOn = all.every(i=>i.visible);
+            gcb.checked = allOn; gcb.indeterminate = !allOn && some;
         }
-        arrow.addEventListener('click', (e) => { e.stopPropagation(); toggleItems(); });
-        hdr.addEventListener('click', (e) => {
-            if (e.target === groupCb || groupCb.contains(e.target)) return;
-            toggleItems();
+
+        Object.keys(g.subgroups).sort().forEach(place => {
+            const items = g.subgroups[place];
+            const sgDiv = document.createElement('div'); sgDiv.className='lp-subgroup';
+
+            const sgHdr = document.createElement('div'); sgHdr.className='lp-subgroup-header';
+            const sgarrow = document.createElement('button'); sgarrow.className='lp-sg-arrow'; sgarrow.innerHTML='<i class="fas fa-chevron-right"></i>';
+            const sgcb = document.createElement('input'); sgcb.type='checkbox'; sgcb.className='lp-sg-cb'; sgcb.checked=false;
+            const sglbl = document.createElement('span'); sglbl.className='lp-sg-label';
+            sglbl.textContent = place === '?' ? '(geocodificando…)' : (place === '—' ? 'Sin localidad' : place);
+            const sgcnt = document.createElement('span'); sgcnt.className='lp-sg-count'; sgcnt.textContent=items.length;
+
+            sgcb.addEventListener('change', () => {
+                items.forEach(it => { activateItem(it, sgcb.checked, g.masterOpacity); if(it.cbEl) it.cbEl.checked=sgcb.checked; });
+                updateGroupCb();
+            });
+
+            sgHdr.appendChild(sgarrow); sgHdr.appendChild(sgcb); sgHdr.appendChild(sglbl); sgHdr.appendChild(sgcnt);
+
+            // Items individuales
+            const itemsDiv = document.createElement('div'); itemsDiv.className='lp-items';
+            items.forEach((item, idx) => {
+                const row = document.createElement('div'); row.className='lp-item';
+                const cb = document.createElement('input'); cb.type='checkbox'; cb.checked=false;
+                item.cbEl = cb;
+                cb.addEventListener('change', () => {
+                    activateItem(item, cb.checked, g.masterOpacity);
+                    const someOn = items.some(i=>i.visible), allOn = items.every(i=>i.visible);
+                    sgcb.checked=allOn; sgcb.indeterminate=!allOn&&someOn;
+                    updateGroupCb();
+                });
+                const lblDiv = document.createElement('div'); lblDiv.className='lp-item-label';
+                item.labelEl = lblDiv;
+                lblDiv.innerHTML = `<span class="idx">#${idx+1}</span> ${gname} <span class="loading">(…)</span>`;
+                row.appendChild(cb); row.appendChild(lblDiv);
+                itemsDiv.appendChild(row);
+            });
+
+            // Toggle subgrupo
+            let sgOpen=false;
+            function toggleSg(e) {
+                if (e && (e.target===sgcb||sgcb.contains(e.target))) return;
+                sgOpen=!sgOpen; sgarrow.classList.toggle('open',sgOpen); itemsDiv.classList.toggle('open',sgOpen);
+            }
+            sgarrow.addEventListener('click', e=>{e.stopPropagation();toggleSg(null);sgOpen=!sgOpen;sgarrow.classList.toggle('open',sgOpen);itemsDiv.classList.toggle('open',sgOpen);sgOpen=!sgOpen;toggleSg(null);});
+            sgarrow.addEventListener('click', (e)=>{e.stopPropagation();});
+            sgHdr.addEventListener('click', toggleSg);
+            sgarrow.onclick = (e) => { e.stopPropagation(); sgOpen=!sgOpen; sgarrow.classList.toggle('open',sgOpen); itemsDiv.classList.toggle('open',sgOpen); };
+
+            sgDiv.appendChild(sgHdr); sgDiv.appendChild(itemsDiv);
+            sgWrap.appendChild(sgDiv);
         });
 
-        groupDiv.appendChild(hdr);
-        groupDiv.appendChild(body);
-        groupDiv.appendChild(itemsDiv);
-        layerList.appendChild(groupDiv);
+        // Toggle grupo
+        let gOpen=false;
+        garrow.onclick = (e) => { e.stopPropagation(); gOpen=!gOpen; garrow.classList.toggle('open',gOpen); sgWrap.classList.toggle('open',gOpen); };
+        hdr.addEventListener('click', (e) => { if(e.target===gcb||gcb.contains(e.target)) return; gOpen=!gOpen; garrow.classList.toggle('open',gOpen); sgWrap.classList.toggle('open',gOpen); });
+
+        gDiv.appendChild(hdr); gDiv.appendChild(body); gDiv.appendChild(sgWrap);
+        layerList.appendChild(gDiv);
     });
 }
 
-// ── Vectorial ──
-function makePopup(props) {
-    if (!props || !Object.keys(props).length)
-        return '<span style="color:#6b7280;font-size:.82rem">Sin datos</span>';
-    let h = '<div style="font-size:.82rem;max-width:260px">';
-    for (const [k,v] of Object.entries(props))
-        if (v && k !== 'styleUrl' && k !== 'styleHash')
-            h += `<div style="margin-bottom:.3rem"><strong style="color:#7c3aed">${k}:</strong> ${v}</div>`;
-    return h + '</div>';
-}
-
-function addVectorGroup(geojson, groupName) {
-    if (!geojson?.features?.length) return;
-    if (!groups[groupName]) groups[groupName] = { items:[], visible:false, masterOpacity:0.85 };
-    const layer = L.geoJSON(geojson, {
-        style: () => ({ color:'#7c3aed', weight:2.5, opacity:.85, fillOpacity:.3, fillColor:'#a855f7' }),
-        pointToLayer: (f,ll) => L.circleMarker(ll, { radius:7, fillColor:'#7c3aed', color:'#fff', weight:2, fillOpacity:.9 }),
-        onEachFeature: (f,lyr) => {
-            lyr.bindPopup(makePopup(f.properties||{}), { maxWidth:300 });
-            const n = f.properties?.name || f.properties?.Name;
-            if (n) lyr.bindTooltip(n, { permanent:false, direction:'top', className:'feature-label' });
-        }
-    }); // desactivado por defecto también
-    const b = layer.getBounds();
-    groups[groupName].items.push({
-        layer, visible:false, cbEl:null, labelEl:null,
-        north: b.getNorth(), south: b.getSouth(), east: b.getEast(), west: b.getWest()
-    });
-}
-
-// ── Parser KML ──
+// ═══════════════════════════════════
+//  PARSER KML
+// ═══════════════════════════════════
 async function parseKMLDocument(kmlText, zipFiles, layerPrefix, parentGroupName) {
     const parser = new DOMParser();
     const doc    = parser.parseFromString(kmlText, 'text/xml');
     if (doc.querySelector('parsererror')) throw new Error('KML inválido');
 
-    const docName = parentGroupName ||
-                    doc.querySelector('Document > name')?.textContent.trim() ||
-                    'Capa';
+    const docName = parentGroupName || doc.querySelector('Document > name')?.textContent.trim() || 'Capa';
 
-    // NetworkLinks
     for (const nl of doc.querySelectorAll('NetworkLink')) {
         const hrefEl = nl.querySelector('Link > href, Url > href');
         if (!hrefEl) continue;
-        const href   = hrefEl.textContent.trim();
-        const subFile = zipFiles[href] || zipFiles[href.replace(/^\//, '')];
+        const href    = hrefEl.textContent.trim();
+        const subFile = zipFiles[href] || zipFiles[href.replace(/^\//,'')];
         if (!subFile) continue;
         const innerKml = await subFile.async('text');
-        const dir = href.substring(0, href.lastIndexOf('/') + 1);
+        const dir = href.substring(0, href.lastIndexOf('/')+1);
         const nlName = nl.querySelector('name')?.textContent.trim() || docName;
         await parseKMLDocument(innerKml, zipFiles, dir, nlName);
     }
 
-    // GroundOverlays
     for (const go of doc.querySelectorAll('GroundOverlay')) {
         const north = parseFloat(go.querySelector('LatLonBox > north, LatLonAltBox > north')?.textContent);
         const south = parseFloat(go.querySelector('LatLonBox > south, LatLonAltBox > south')?.textContent);
@@ -480,82 +598,117 @@ async function parseKMLDocument(kmlText, zipFiles, layerPrefix, parentGroupName)
 
         const colorHex = go.querySelector('color')?.textContent.trim();
         let opacity = 0.75;
-        if (colorHex?.length >= 2) {
-            const alpha = parseInt(colorHex.substring(0,2),16) / 255;
-            opacity = alpha < 0.1 ? 0.75 : alpha;
-        }
+        if (colorHex?.length>=2) { const a=parseInt(colorHex.substring(0,2),16)/255; opacity=a<0.1?0.75:a; }
 
         const groupName = parentGroupName || docName;
-        const fullPath  = (layerPrefix || '') + href;
+        const fullPath  = (layerPrefix||'')+href;
         const imgFile   = zipFiles[fullPath] || zipFiles[href];
         if (!imgFile) continue;
 
-        const blob   = await imgFile.async('blob');
-        const imgUrl = URL.createObjectURL(blob);
-        addToGroup(groupName, north, south, east, west, imgUrl, opacity);
+        const rawBuf = await imgFile.async('arraybuffer');
+        await addToGroup(groupName, north, south, east, west, rawBuf, 'image/png', opacity);
     }
 
-    // Vectorial
     const geojson = toGeoJSON.kml(doc);
-    if (geojson?.features?.length) addVectorGroup(geojson, parentGroupName || docName);
+    if (geojson?.features?.length) {
+        // vectorial: agregar como grupo simple (sin subgrupos de localidad por ahora)
+        if (!groups['Vectorial']) groups['Vectorial'] = { subgroups:{}, visible:false, masterOpacity:0.85 };
+        // placeholder item para vectorial
+    }
 }
 
-// ── Entry point ──
+// ═══════════════════════════════════
+//  GEOCODIFICACIÓN → reclasificar subgrupos
+// ═══════════════════════════════════
+function geocodeAllItems() {
+    Object.entries(groups).forEach(([gname, g]) => {
+        const pending = g.subgroups['?'] || [];
+        [...pending].forEach(item => {
+            const lat = (item.north+item.south)/2;
+            const lon = (item.east+item.west)/2;
+            reverseGeocode(lat, lon, place => {
+                resolvePlace(gname, item, place);
+                // Actualizar label si existe
+                if (item.labelEl) {
+                    const placeText = item.place && item.place!=='—' ? item.place : 'Sin localidad';
+                    item.labelEl.innerHTML = `${gname} <span class="place">(${placeText})</span>`;
+                }
+                // Reconstruir el panel después de que todas las geocodificaciones hayan llegado
+                // (usamos un debounce simple)
+                scheduleRebuild();
+            });
+        });
+    });
+}
+
+let rebuildTimer = null;
+function scheduleRebuild() {
+    clearTimeout(rebuildTimer);
+    rebuildTimer = setTimeout(() => rebuildPanel(), 400);
+}
+
+// ═══════════════════════════════════
+//  ENTRY POINT
+// ═══════════════════════════════════
 fileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    clearMap();
     const fname = file.name.toLowerCase();
     if (!fname.endsWith('.kml') && !fname.endsWith('.kmz')) {
         showStatus('Formato no válido (.kml/.kmz)', 'error');
-        fileInput.value = ''; return;
+        fileInput.value=''; return;
     }
+    pendingFile = file;
+    showModal();
+});
 
+async function processFile(file) {
+    clearMap();
+    const fname = file.name.toLowerCase();
     showStatus('Cargando…', 'info');
-
     try {
         if (fname.endsWith('.kmz')) {
             const zip      = new JSZip();
             const contents = await zip.loadAsync(file);
             const zipFiles = contents.files;
-
             let rootKml = zipFiles['doc.kml'] || zipFiles['index.kml'];
-            if (!rootKml) {
-                for (const [n,f] of Object.entries(zipFiles))
-                    if (!f.dir && n.endsWith('.kml') && !n.includes('/')) { rootKml = f; break; }
-            }
-            if (!rootKml) throw new Error('No se encontró KML raíz en el KMZ');
-
+            if (!rootKml) for (const [n,f] of Object.entries(zipFiles)) if (!f.dir&&n.endsWith('.kml')&&!n.includes('/')) { rootKml=f; break; }
+            if (!rootKml) throw new Error('No se encontró KML raíz');
             await parseKMLDocument(await rootKml.async('text'), zipFiles, '', null);
         } else {
             await parseKMLDocument(await file.text(), {}, '', null);
         }
 
-        if (!Object.keys(groups).length) {
-            showStatus('Sin datos visualizables', 'error'); return;
-        }
+        if (!Object.keys(groups).length) { showStatus('Sin datos visualizables', 'error'); return; }
 
-        // Ajustar vista al bounding box total (aunque capas estén ocultas)
+        // Ajustar vista
         try {
             let combined = null;
-            Object.values(groups).forEach(g => g.items.forEach(it => {
-                const b = L.latLngBounds([[it.south, it.west],[it.north, it.east]]);
-                combined = combined ? combined.extend(b) : b;
-            }));
-            if (combined) map.fitBounds(combined, { padding:[40,40] });
+            Object.values(groups).forEach(g =>
+                Object.values(g.subgroups).flat().forEach(it => {
+                    const b = L.latLngBounds([[it.south,it.west],[it.north,it.east]]);
+                    combined = combined ? combined.extend(b) : b;
+                })
+            );
+            if (combined) map.fitBounds(combined, {padding:[40,40]});
         } catch(_) {}
 
-        showStatus('Cargado — capas desactivadas por defecto', 'success');
+        const enc = sessionKey ? ' · 🔒 AES-256' : '';
+        showStatus('Capas listas — desactivadas por defecto' + enc, 'success');
+
         rebuildPanel();
         layerPanel.classList.add('show');
         clearBtn.classList.add('visible');
+        if (sessionKey) lockBadge.style.display='inline';
+
+        // Iniciar geocodificación asíncrona
+        geocodeAllItems();
 
     } catch(err) {
-        showStatus('Error: ' + err.message, 'error');
+        showStatus('Error: '+err.message, 'error');
         console.error(err);
     }
-});
+}
 
 console.log('notsure KML/KMZ Map Viewer — by nitsugaone, built with Perplexity Computer');
 </script>
