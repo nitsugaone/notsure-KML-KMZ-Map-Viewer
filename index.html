@@ -4,382 +4,508 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>notsure KML/KMZ Map Viewer</title>
-
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
-
-    <!-- Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
     <style>
-        body { padding: 0; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; display: flex; flex-direction: column; height: 100vh; }
-        #map { flex: 1; width: 100%; }
-        .header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%); color: white; padding: 1.25rem 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); position: relative; overflow: hidden; }
-        .header::before { content: ''; position: absolute; top: -50%; right: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); animation: pulse 15s ease-in-out infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.3; } }
-        .brand-logo { font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); position: relative; z-index: 1; }
-        .brand-accent { color: #fbbf24; font-weight: 800; }
-        .subtitle { font-size: 0.85rem; opacity: 0.9; margin-top: 0.25rem; position: relative; z-index: 1; }
-        .upload-section { background: white; padding: 0.85rem 0; border-bottom: 2px solid #e5e7eb; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .card-upload { background: #ffffff; border-radius: 10px; padding: 0.85rem 1.25rem; border: 2px dashed #cbd5e1; transition: all 0.3s ease; }
-        .card-upload:hover { border-color: #7e22ce; box-shadow: 0 4px 12px rgba(126,34,206,0.1); }
-        .file-input-wrapper { position: relative; display: inline-block; }
-        .file-input-wrapper input[type=file] { display: none; }
-        .file-input-label { display: inline-flex; align-items: center; padding: 0.65rem 1.5rem; background: linear-gradient(135deg, #7e22ce 0%, #5b21b6 100%); color: white; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(126,34,206,0.3); }
-        .file-input-label:hover { background: linear-gradient(135deg, #6b21a8 0%, #4c1d95 100%); transform: translateY(-2px); }
-        .file-input-label i { margin-right: 0.5rem; }
-        .status-message { margin-left: 1rem; padding: 0.5rem 1rem; border-radius: 8px; display: none; font-weight: 500; border-left: 4px solid; font-size: 0.88rem; }
-        .status-message.show { display: inline-flex; align-items: center; }
-        .status-message i { margin-right: 0.5rem; }
-        .status-success { background: #d1fae5; color: #065f46; border-left-color: #10b981; }
-        .status-error { background: #fee2e2; color: #991b1b; border-left-color: #ef4444; }
-        .status-info { background: #dbeafe; color: #1e40af; border-left-color: #3b82f6; }
-        .layer-info { display: none; margin-left: 1rem; padding: 0.45rem 1rem; background: #f3f4f6; border-radius: 8px; border-left: 4px solid #7e22ce; font-size: 0.85rem; }
-        .layer-info.show { display: inline-flex; align-items: center; }
-        .layer-info i { margin-right: 0.5rem; color: #7e22ce; }
-        .clear-btn { margin-left: 0.75rem; background: #ef4444; color: white; border: none; padding: 0.65rem 1.2rem; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; font-size: 0.88rem; }
-        .clear-btn:hover { background: #dc2626; transform: translateY(-2px); }
-        .clear-btn i { margin-right: 0.4rem; }
-        .feature-label { background: white; border: 2px solid #7e22ce; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; color: #1f2937; box-shadow: 0 2px 8px rgba(0,0,0,0.15); pointer-events: none; }
-        .info-badge { display: inline-block; padding: 0.25rem 0.6rem; background: #7e22ce; color: white; border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-left: 0.4rem; }
-        .map-wrapper { flex: 1; display: flex; flex-direction: column; }
-        /* Footer minimalista — solo texto Leaflet */
-        .footer-note {
-            text-align: right;
-            padding: 0.3rem 0.75rem;
-            color: #6b7280;
-            font-size: 0.78rem;
-            background: #f9fafb;
-            border-top: 1px solid #e5e7eb;
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: #111827; }
+
+        /* ── Topbar ── */
+        #topbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 55%, #6d28d9 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            flex-wrap: wrap;
+            min-height: 52px;
         }
-        .footer-note a { color: #7e22ce; text-decoration: none; font-weight: 600; }
-        .footer-note a:hover { text-decoration: underline; }
-        /* Layer toggle panel */
-        .layer-panel { position: absolute; top: 10px; right: 10px; z-index: 1000; background: white; border-radius: 8px; padding: 0.6rem 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; font-size: 0.85rem; min-width: 180px; }
-        .layer-panel.show { display: block; }
-        .layer-panel h6 { font-weight: 700; color: #1f2937; margin-bottom: 0.5rem; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .layer-panel label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; padding: 0.2rem 0; }
-        .layer-panel input[type=checkbox] { accent-color: #7e22ce; }
+
+        /* Logo */
+        .brand {
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #fff;
+            white-space: nowrap;
+            margin-right: 4px;
+        }
+        .brand span { color: #fbbf24; }
+
+        /* Divisor */
+        .sep { width: 1px; height: 24px; background: rgba(255,255,255,0.25); margin: 0 2px; }
+
+        /* Botón archivo */
+        #fileLabel {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px;
+            background: #7c3aed; color: #fff;
+            border-radius: 7px; cursor: pointer;
+            font-size: 0.82rem; font-weight: 600;
+            border: none; white-space: nowrap;
+            transition: background .2s, transform .15s;
+        }
+        #fileLabel:hover { background: #6d28d9; transform: translateY(-1px); }
+        #fileInput { display: none; }
+
+        /* Botón limpiar */
+        #clearBtn {
+            display: none; align-items: center; gap: 6px;
+            padding: 6px 13px;
+            background: #dc2626; color: #fff;
+            border-radius: 7px; border: none; cursor: pointer;
+            font-size: 0.82rem; font-weight: 600;
+            white-space: nowrap;
+            transition: background .2s, transform .15s;
+        }
+        #clearBtn.visible { display: inline-flex; }
+        #clearBtn:hover { background: #b91c1c; transform: translateY(-1px); }
+
+        /* Chip de estado / info */
+        #statusChip {
+            display: none;
+            align-items: center; gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
+            white-space: nowrap;
+        }
+        #statusChip.show { display: inline-flex; }
+        #statusChip.s-info    { background: rgba(59,130,246,.25); color: #bfdbfe; }
+        #statusChip.s-success { background: rgba(16,185,129,.25); color: #a7f3d0; }
+        #statusChip.s-error   { background: rgba(239,68,68,.25);  color: #fca5a5; }
+
+        /* Chip de capas */
+        #layerChip {
+            display: none;
+            align-items: center; gap: 6px;
+            padding: 5px 12px;
+            background: rgba(109,40,217,.35);
+            color: #e9d5ff;
+            border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1px solid rgba(139,92,246,.4);
+            transition: background .2s;
+        }
+        #layerChip.show { display: inline-flex; }
+        #layerChip:hover { background: rgba(109,40,217,.55); }
+
+        /* ── Mapa ── */
+        #map {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+        }
+        #map-wrap {
+            position: relative;
+            flex: 1;
+        }
+        body { display: flex; flex-direction: column; }
+
+        /* ── Panel de capas flotante ── */
+        #layerPanel {
+            position: absolute;
+            top: 10px; right: 10px;
+            z-index: 800;
+            background: rgba(17,24,39,.92);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(139,92,246,.35);
+            border-radius: 10px;
+            padding: 10px 12px;
+            min-width: 210px;
+            max-width: 260px;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            display: none;
+            color: #f3f4f6;
+            font-size: 0.82rem;
+        }
+        #layerPanel.show { display: block; }
+        #layerPanel::-webkit-scrollbar { width: 5px; }
+        #layerPanel::-webkit-scrollbar-thumb { background: #6d28d9; border-radius: 4px; }
+
+        .lp-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .8px;
+            color: #a78bfa;
+        }
+        .lp-close {
+            background: none; border: none; color: #6b7280;
+            cursor: pointer; font-size: 0.9rem; line-height: 1;
+            padding: 0; transition: color .15s;
+        }
+        .lp-close:hover { color: #f9fafb; }
+
+        /* Grupo de capas */
+        .lp-group {
+            border: 1px solid rgba(139,92,246,.2);
+            border-radius: 7px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .lp-group-header {
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px 9px;
+            background: rgba(109,40,217,.25);
+            cursor: default;
+        }
+        .lp-group-header input[type=checkbox] { accent-color: #a78bfa; flex-shrink: 0; }
+        .lp-group-label { flex: 1; font-weight: 700; font-size: 0.82rem; color: #e9d5ff; }
+        .lp-count { font-size: 0.72rem; color: #9ca3af; }
+        .lp-group-body { padding: 7px 9px 5px; }
+
+        /* Slider opacidad */
+        .lp-opacity {
+            display: flex; align-items: center; gap: 7px;
+            margin-top: 2px;
+        }
+        .lp-opacity label { font-size: 0.74rem; color: #9ca3af; white-space: nowrap; }
+        .lp-opacity input[type=range] {
+            flex: 1; accent-color: #7c3aed;
+            height: 3px; cursor: pointer;
+        }
+        .lp-opacity span { font-size: 0.74rem; color: #d1d5db; min-width: 28px; text-align: right; }
+
+        /* Feature label */
+        .feature-label {
+            background: #fff; border: 2px solid #7c3aed;
+            padding: 3px 8px; border-radius: 5px;
+            font-weight: 600; font-size: 11px; color: #1f2937;
+            box-shadow: 0 2px 6px rgba(0,0,0,.2);
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <div class="header animate__animated animate__fadeInDown">
-        <div class="container-fluid px-4">
-            <div class="brand-logo">
-                <i class="fas fa-map-marked-alt"></i>
-                <span class="brand-accent">notsure</span> KML/KMZ Map Viewer
-            </div>
-            <div class="subtitle">
-                <i class="fas fa-layer-group"></i> Geospatial Mapping — OpenStreetMap · Leaflet
-            </div>
+<!-- ── Topbar ── -->
+<div id="topbar">
+    <div class="brand"><i class="fas fa-map-marked-alt"></i> <span>notsure</span> KML/KMZ</div>
+    <div class="sep"></div>
+
+    <input type="file" id="fileInput" accept=".kml,.kmz">
+    <label for="fileInput" id="fileLabel">
+        <i class="fas fa-folder-open"></i> Abrir archivo
+    </label>
+
+    <button id="clearBtn"><i class="fas fa-times"></i> Limpiar</button>
+
+    <div id="statusChip"></div>
+    <div id="layerChip" title="Mostrar/ocultar panel de capas">
+        <i class="fas fa-layer-group"></i>
+        <span id="layerChipText">0 grupos</span>
+    </div>
+</div>
+
+<!-- ── Mapa ── -->
+<div id="map-wrap">
+    <div id="map"></div>
+
+    <!-- Panel de capas agrupadas -->
+    <div id="layerPanel">
+        <div class="lp-header">
+            <span><i class="fas fa-layer-group"></i> Capas</span>
+            <button class="lp-close" id="lpClose" title="Cerrar"><i class="fas fa-times"></i></button>
         </div>
+        <div id="layerList"></div>
     </div>
+</div>
 
-    <!-- Upload Section -->
-    <div class="upload-section animate__animated animate__fadeIn">
-        <div class="container-fluid px-4">
-            <div class="card-upload">
-                <div class="d-flex align-items-center flex-wrap gap-2">
-                    <div class="file-input-wrapper">
-                        <input type="file" id="fileInput" accept=".kml,.kmz" />
-                        <label for="fileInput" class="file-input-label">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            Seleccionar KML / KMZ
-                        </label>
-                    </div>
-                    <button id="clearBtn" class="clear-btn" style="display:none;">
-                        <i class="fas fa-trash-alt"></i> Limpiar
-                    </button>
-                    <span class="info-badge"><i class="fas fa-file-code"></i> KML</span>
-                    <span class="info-badge"><i class="fas fa-file-archive"></i> KMZ</span>
-                    <div id="statusMessage" class="status-message"></div>
-                    <div id="layerInfo" class="layer-info"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
+<script>
+/*
+ * notsure KML/KMZ Map Viewer
+ * Desarrollado en paralelo con Computer de Perplexity (https://computer.perplexity.ai)
+ * Basado en: xsukax/xsukax-KML-KMZ-Map-Viewer (https://github.com/xsukax/xsukax-KML-KMZ-Map-Viewer)
+ * Licencia: GPL-3.0
+ */
 
-    <!-- Map -->
-    <div class="map-wrapper" style="position:relative;">
-        <div id="map"></div>
-        <!-- Layer toggle panel (visible cuando hay capas nombradas) -->
-        <div class="layer-panel" id="layerPanel">
-            <h6><i class="fas fa-layer-group"></i> Capas</h6>
-            <div id="layerList"></div>
-        </div>
-    </div>
+// ── Mapa ──
+const map = L.map('map', { preferCanvas: true, zoomControl: true })
+             .setView([-51.62038256588755, -69.22341147299332], 12);
 
-    <!-- Footer minimalista -->
-    <div class="footer-note">
-        <a href="https://leafletjs.com" target="_blank">Leaflet</a>
-        &nbsp;·&nbsp; © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors
-        &nbsp;·&nbsp; <a href="https://www.openstreetmap.org/user/nitsugaone" target="_blank">nitsugaone</a>
-    </div>
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="https://www.openstreetmap.org/user/nitsugaone">nitsugaone</a>',
+    maxZoom: 19
+}).addTo(map);
 
-    <!-- Leaflet JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+// ── Ajustar altura del mapa al espacio disponible ──
+function resizeMap() {
+    const topH = document.getElementById('topbar').offsetHeight;
+    const wrap  = document.getElementById('map-wrap');
+    wrap.style.height = (window.innerHeight - topH) + 'px';
+    map.invalidateSize();
+}
+window.addEventListener('resize', resizeMap);
+resizeMap();
 
-    <!-- JSZip para KMZ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+// ── Estado ──
+// groups: { [groupName]: { layers: [{layer, opacity}], visible, masterOpacity } }
+let groups = {};
 
-    <!-- ToGeoJSON para KML vectorial -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
+const fileInput   = document.getElementById('fileInput');
+const statusChip  = document.getElementById('statusChip');
+const clearBtn    = document.getElementById('clearBtn');
+const layerPanel  = document.getElementById('layerPanel');
+const layerList   = document.getElementById('layerList');
+const layerChip   = document.getElementById('layerChip');
+const layerChipTx = document.getElementById('layerChipText');
+const lpClose     = document.getElementById('lpClose');
 
-    <script>
-    /*
-     * notsure KML/KMZ Map Viewer
-     * Desarrollado en paralelo con Computer de Perplexity (https://computer.perplexity.ai)
-     * Basado en: xsukax/xsukax-KML-KMZ-Map-Viewer (https://github.com/xsukax/xsukax-KML-KMZ-Map-Viewer)
-     * Licencia: GPL-3.0
-     */
+// ── UI helpers ──
+function showStatus(msg, type) {
+    const icons = { info: 'fa-spinner fa-spin', success: 'fa-check-circle', error: 'fa-exclamation-circle' };
+    statusChip.innerHTML = `<i class="fas ${icons[type]}"></i> ${msg}`;
+    statusChip.className = `show s-${type}`;
+    if (type === 'success') setTimeout(() => statusChip.classList.remove('show'), 4000);
+}
 
-        // --- Mapa base ---
-        const map = L.map('map', { preferCanvas: true })
-                     .setView([-51.62038256588755, -69.22341147299332], 12);
+function clearMap() {
+    Object.values(groups).forEach(g => g.layers.forEach(l => map.removeLayer(l.layer)));
+    groups = {};
+    statusChip.className = '';
+    clearBtn.classList.remove('visible');
+    fileInput.value = '';
+    layerPanel.classList.remove('show');
+    layerChip.classList.remove('show');
+    layerList.innerHTML = '';
+}
+clearBtn.addEventListener('click', clearMap);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 19
-        }).addTo(map);
+// Toggle panel desde chip
+layerChip.addEventListener('click', () => layerPanel.classList.toggle('show'));
+lpClose.addEventListener('click', () => layerPanel.classList.remove('show'));
 
-        // --- Estado ---
-        let loadedLayers = [];   // {name, layer, visible}
-        const fileInput    = document.getElementById('fileInput');
-        const statusMsg    = document.getElementById('statusMessage');
-        const layerInfoEl  = document.getElementById('layerInfo');
-        const clearBtn     = document.getElementById('clearBtn');
-        const layerPanel   = document.getElementById('layerPanel');
-        const layerList    = document.getElementById('layerList');
+// ── Agregar una imagen overlay a un grupo ──
+function addToGroup(groupName, north, south, east, west, imageUrl, opacity) {
+    if (!groups[groupName]) groups[groupName] = { layers: [], visible: true, masterOpacity: opacity };
+    const layer = L.imageOverlay(imageUrl, [[south,west],[north,east]], { opacity, interactive: false }).addTo(map);
+    groups[groupName].layers.push({ layer, opacity });
+}
 
-        // --- UI helpers ---
-        function showStatus(msg, type) {
-            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-spinner fa-spin' };
-            statusMsg.innerHTML = `<i class="fas ${icons[type] || 'fa-info-circle'}"></i><span>${msg}</span>`;
-            statusMsg.className = `status-message show status-${type} animate__animated animate__fadeIn`;
-            if (type === 'success') setTimeout(() => statusMsg.classList.remove('show'), 5000);
-        }
+// ── Rebuild panel (agrupado) ──
+function rebuildPanel() {
+    layerList.innerHTML = '';
+    const keys = Object.keys(groups);
+    if (keys.length === 0) { layerPanel.classList.remove('show'); layerChip.classList.remove('show'); return; }
 
-        function updateLayerInfo() {
-            const total = loadedLayers.length;
-            if (total === 0) { layerInfoEl.classList.remove('show'); return; }
-            layerInfoEl.innerHTML = `<i class="fas fa-layer-group"></i><span><strong>${total}</strong> capa${total !== 1 ? 's' : ''} cargada${total !== 1 ? 's' : ''}</span>`;
-            layerInfoEl.classList.add('show');
-        }
+    layerChipTx.textContent = keys.length + ' grupo' + (keys.length !== 1 ? 's' : '');
+    layerChip.classList.add('show');
 
-        function rebuildLayerPanel() {
-            layerList.innerHTML = '';
-            if (loadedLayers.length === 0) { layerPanel.classList.remove('show'); return; }
-            layerPanel.classList.add('show');
-            loadedLayers.forEach((item, idx) => {
-                const label = document.createElement('label');
-                const cb = document.createElement('input');
-                cb.type = 'checkbox';
-                cb.checked = item.visible;
-                cb.addEventListener('change', () => {
-                    item.visible = cb.checked;
-                    if (cb.checked) item.layer.addTo(map);
-                    else map.removeLayer(item.layer);
-                });
-                label.appendChild(cb);
-                label.appendChild(document.createTextNode(' ' + item.name));
-                layerList.appendChild(label);
-            });
-        }
+    keys.forEach(gname => {
+        const g = groups[gname];
+        const div = document.createElement('div');
+        div.className = 'lp-group';
 
-        function clearMap() {
-            loadedLayers.forEach(item => map.removeLayer(item.layer));
-            loadedLayers = [];
-            layerInfoEl.classList.remove('show');
-            statusMsg.classList.remove('show');
-            clearBtn.style.display = 'none';
-            fileInput.value = '';
-            rebuildLayerPanel();
-        }
-        clearBtn.addEventListener('click', clearMap);
+        // Header del grupo
+        const hdr = document.createElement('div');
+        hdr.className = 'lp-group-header';
 
-        // --- Estilo vectorial ---
-        function getVectorStyle() {
-            return { color: '#7e22ce', weight: 2.5, opacity: 0.85, fillOpacity: 0.3, fillColor: '#a855f7' };
-        }
-
-        function makePopup(props) {
-            if (!props || Object.keys(props).length === 0)
-                return '<div style="padding:.4rem"><i class="fas fa-info-circle"></i> Sin datos</div>';
-            let html = '<div style="max-width:280px;font-size:.85rem">';
-            for (const [k, v] of Object.entries(props)) {
-                if (v && k !== 'styleUrl' && k !== 'styleHash')
-                    html += `<div style="margin-bottom:.35rem"><strong style="color:#7e22ce">${k}:</strong> ${v}</div>`;
-            }
-            return html + '</div>';
-        }
-
-        // --- Renderizar GeoJSON vectorial ---
-        function addVectorLayer(geojson, name) {
-            if (!geojson || !geojson.features || geojson.features.length === 0) return false;
-            const layer = L.geoJSON(geojson, {
-                style: getVectorStyle,
-                pointToLayer: (f, latlng) => L.circleMarker(latlng, {
-                    radius: 8, fillColor: '#7e22ce', color: '#fff',
-                    weight: 2, opacity: 1, fillOpacity: 0.9
-                }),
-                onEachFeature: (f, lyr) => {
-                    const props = f.properties || {};
-                    lyr.bindPopup(makePopup(props), { maxWidth: 320 });
-                    const n = props.name || props.Name;
-                    if (n) lyr.bindTooltip(n, { permanent: false, direction: 'top', className: 'feature-label' });
-                }
-            }).addTo(map);
-            loadedLayers.push({ name, layer, visible: true });
-            return true;
-        }
-
-        // --- Renderizar GroundOverlay (imagen georreferenciada) ---
-        function addGroundOverlay(north, south, east, west, imageUrl, name, opacity) {
-            const bounds = [[south, west], [north, east]];
-            const layer = L.imageOverlay(imageUrl, bounds, { opacity: opacity || 0.75 }).addTo(map);
-            loadedLayers.push({ name: name || 'Overlay', layer, visible: true });
-        }
-
-        // --- Parsear un documento KML (como string) con su contexto de archivos ZIP ---
-        async function parseKMLDocument(kmlText, zipFiles, layerPrefix) {
-            const parser = new DOMParser();
-            const doc    = parser.parseFromString(kmlText, 'text/xml');
-
-            if (doc.querySelector('parsererror')) throw new Error('KML inválido');
-
-            // 1. NetworkLinks internos → cargar sus KMLs desde el ZIP
-            const networkLinks = doc.querySelectorAll('NetworkLink');
-            for (const nl of networkLinks) {
-                const hrefEl = nl.querySelector('Link > href, Url > href');
-                if (!hrefEl) continue;
-                const href = hrefEl.textContent.trim();
-                const zipFile = zipFiles[href] || zipFiles[href.replace(/^\//, '')];
-                if (zipFile) {
-                    const innerKml = await zipFile.async('text');
-                    // Calcular prefijo de directorio para las imágenes relativas
-                    const dir = href.substring(0, href.lastIndexOf('/') + 1);
-                    await parseKMLDocument(innerKml, zipFiles, dir);
-                }
-            }
-
-            // 2. GroundOverlays
-            const overlays = doc.querySelectorAll('GroundOverlay');
-            for (const go of overlays) {
-                const north = parseFloat(go.querySelector('LatLonBox > north, LatLonAltBox > north')?.textContent);
-                const south = parseFloat(go.querySelector('LatLonBox > south, LatLonAltBox > south')?.textContent);
-                const east  = parseFloat(go.querySelector('LatLonBox > east,  LatLonAltBox > east')?.textContent);
-                const west  = parseFloat(go.querySelector('LatLonBox > west,  LatLonAltBox > west')?.textContent);
-                const href  = go.querySelector('Icon > href')?.textContent.trim();
-                const name  = go.querySelector('name')?.textContent.trim() || 'Overlay';
-
-                // Opacidad desde <color> AABBGGRR (alpha byte)
-                const colorHex = go.querySelector('color')?.textContent.trim();
-                let opacity = 0.75;
-                if (colorHex && colorHex.length >= 2) {
-                    opacity = parseInt(colorHex.substring(0, 2), 16) / 255;
-                    if (opacity < 0.1) opacity = 0.75; // fallback si es muy transparente
-                }
-
-                if (isNaN(north) || !href) continue;
-
-                // Buscar imagen en ZIP: el href puede ser relativo al KML, usar layerPrefix
-                const fullPath = (layerPrefix || '') + href;
-                const imgFile  = zipFiles[fullPath] || zipFiles[href];
-                if (imgFile) {
-                    const blob   = await imgFile.async('blob');
-                    const imgUrl = URL.createObjectURL(blob);
-                    addGroundOverlay(north, south, east, west, imgUrl, name, opacity);
-                }
-            }
-
-            // 3. Features vectoriales
-            const geojson = toGeoJSON.kml(doc);
-            if (geojson && geojson.features && geojson.features.length > 0) {
-                addVectorLayer(geojson, layerPrefix ? layerPrefix.replace(/\/$/, '') : 'Vectorial');
-            }
-        }
-
-        // --- Entry point: archivo seleccionado ---
-        fileInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            clearMap();
-            const fname = file.name.toLowerCase();
-
-            if (!fname.endsWith('.kml') && !fname.endsWith('.kmz')) {
-                showStatus('Seleccioná un archivo .kml o .kmz válido', 'error');
-                fileInput.value = '';
-                return;
-            }
-
-            showStatus('Cargando…', 'info');
-
-            try {
-                if (fname.endsWith('.kmz')) {
-                    // --- KMZ (ZIP) ---
-                    const zip      = new JSZip();
-                    const contents = await zip.loadAsync(file);
-                    const zipFiles = contents.files; // índice plano de todos los archivos
-
-                    // Buscar doc.kml o el primer .kml raíz
-                    let rootKmlFile = zipFiles['doc.kml'] || zipFiles['index.kml'];
-                    if (!rootKmlFile) {
-                        // Primer KML en raíz
-                        for (const [name, f] of Object.entries(zipFiles)) {
-                            if (!f.dir && name.endsWith('.kml') && !name.includes('/')) {
-                                rootKmlFile = f; break;
-                            }
-                        }
-                    }
-                    if (!rootKmlFile) throw new Error('No se encontró un KML raíz en el KMZ');
-
-                    const rootKml = await rootKmlFile.async('text');
-                    await parseKMLDocument(rootKml, zipFiles, '');
-
-                } else {
-                    // --- KML puro ---
-                    const text = await file.text();
-                    await parseKMLDocument(text, {}, '');
-                }
-
-                if (loadedLayers.length === 0) {
-                    showStatus('No se encontraron features o imágenes en el archivo', 'error');
-                    return;
-                }
-
-                // Ajustar vista al conjunto de capas
-                try {
-                    const allBounds = loadedLayers
-                        .map(l => l.layer.getBounds ? l.layer.getBounds() : null)
-                        .filter(Boolean);
-                    if (allBounds.length > 0) {
-                        let combined = allBounds[0];
-                        for (let i = 1; i < allBounds.length; i++) combined = combined.extend(allBounds[i]);
-                        map.fitBounds(combined, { padding: [40, 40] });
-                    }
-                } catch (_) {}
-
-                showStatus(`Archivo cargado correctamente`, 'success');
-                updateLayerInfo();
-                rebuildLayerPanel();
-                clearBtn.style.display = 'inline-block';
-
-            } catch (err) {
-                showStatus('Error: ' + err.message, 'error');
-                console.error(err);
-            }
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.checked = g.visible;
+        cb.addEventListener('change', () => {
+            g.visible = cb.checked;
+            g.layers.forEach(l => { if (g.visible) l.layer.addTo(map); else map.removeLayer(l.layer); });
         });
 
-        console.log('notsure KML/KMZ Map Viewer — by nitsugaone, built with Perplexity Computer');
-    </script>
+        const lbl = document.createElement('span');
+        lbl.className = 'lp-group-label';
+        lbl.textContent = gname;
+
+        const cnt = document.createElement('span');
+        cnt.className = 'lp-count';
+        cnt.textContent = g.layers.length + ' img';
+
+        hdr.appendChild(cb);
+        hdr.appendChild(lbl);
+        hdr.appendChild(cnt);
+
+        // Body: solo slider de opacidad
+        const body = document.createElement('div');
+        body.className = 'lp-group-body';
+
+        const opRow = document.createElement('div');
+        opRow.className = 'lp-opacity';
+
+        const opLbl = document.createElement('label');
+        opLbl.textContent = 'Opacidad';
+
+        const slider = document.createElement('input');
+        slider.type = 'range'; slider.min = 0; slider.max = 100;
+        slider.value = Math.round(g.masterOpacity * 100);
+
+        const valSpan = document.createElement('span');
+        valSpan.textContent = slider.value + '%';
+
+        slider.addEventListener('input', () => {
+            const op = parseInt(slider.value) / 100;
+            g.masterOpacity = op;
+            valSpan.textContent = slider.value + '%';
+            g.layers.forEach(l => l.layer.setOpacity(op));
+        });
+
+        opRow.appendChild(opLbl);
+        opRow.appendChild(slider);
+        opRow.appendChild(valSpan);
+        body.appendChild(opRow);
+
+        div.appendChild(hdr);
+        div.appendChild(body);
+        layerList.appendChild(div);
+    });
+}
+
+// ── Vectorial ──
+function makePopup(props) {
+    if (!props || !Object.keys(props).length)
+        return '<span style="color:#6b7280;font-size:.82rem">Sin datos</span>';
+    let h = '<div style="font-size:.82rem;max-width:260px">';
+    for (const [k,v] of Object.entries(props))
+        if (v && k !== 'styleUrl' && k !== 'styleHash')
+            h += `<div style="margin-bottom:.3rem"><strong style="color:#7c3aed">${k}:</strong> ${v}</div>`;
+    return h + '</div>';
+}
+
+function addVectorGroup(geojson, groupName) {
+    if (!geojson?.features?.length) return;
+    if (!groups[groupName]) groups[groupName] = { layers: [], visible: true, masterOpacity: 0.85 };
+    const layer = L.geoJSON(geojson, {
+        style: () => ({ color:'#7c3aed', weight:2.5, opacity:.85, fillOpacity:.3, fillColor:'#a855f7' }),
+        pointToLayer: (f,ll) => L.circleMarker(ll, { radius:7, fillColor:'#7c3aed', color:'#fff', weight:2, fillOpacity:.9 }),
+        onEachFeature: (f,lyr) => {
+            lyr.bindPopup(makePopup(f.properties||{}), { maxWidth:300 });
+            const n = f.properties?.name || f.properties?.Name;
+            if (n) lyr.bindTooltip(n, { permanent:false, direction:'top', className:'feature-label' });
+        }
+    }).addTo(map);
+    groups[groupName].layers.push({ layer, opacity: 0.85 });
+}
+
+// ── Parser KML ──
+async function parseKMLDocument(kmlText, zipFiles, layerPrefix, parentGroupName) {
+    const parser = new DOMParser();
+    const doc    = parser.parseFromString(kmlText, 'text/xml');
+    if (doc.querySelector('parsererror')) throw new Error('KML inválido');
+
+    // Nombre del documento como nombre de grupo
+    const docName = parentGroupName ||
+                    doc.querySelector('Document > name')?.textContent.trim() ||
+                    'Capa';
+
+    // NetworkLinks → sub-KMLs
+    for (const nl of doc.querySelectorAll('NetworkLink')) {
+        const hrefEl = nl.querySelector('Link > href, Url > href');
+        if (!hrefEl) continue;
+        const href = hrefEl.textContent.trim();
+        const subFile = zipFiles[href] || zipFiles[href.replace(/^\//, '')];
+        if (!subFile) continue;
+        const innerKml = await subFile.async('text');
+        const dir = href.substring(0, href.lastIndexOf('/') + 1);
+        // Nombre del sub-grupo desde el NetworkLink
+        const nlName = nl.querySelector('name')?.textContent.trim() || docName;
+        await parseKMLDocument(innerKml, zipFiles, dir, nlName);
+    }
+
+    // GroundOverlays → agrupar por nombre del Folder padre o nombre del Document
+    const overlays = doc.querySelectorAll('GroundOverlay');
+    for (const go of overlays) {
+        const north = parseFloat(go.querySelector('LatLonBox > north, LatLonAltBox > north')?.textContent);
+        const south = parseFloat(go.querySelector('LatLonBox > south, LatLonAltBox > south')?.textContent);
+        const east  = parseFloat(go.querySelector('LatLonBox > east,  LatLonAltBox > east')?.textContent);
+        const west  = parseFloat(go.querySelector('LatLonBox > west,  LatLonAltBox > west')?.textContent);
+        const href  = go.querySelector('Icon > href')?.textContent.trim();
+        if (isNaN(north) || !href) continue;
+
+        const colorHex = go.querySelector('color')?.textContent.trim();
+        let opacity = 0.75;
+        if (colorHex?.length >= 2) {
+            const alpha = parseInt(colorHex.substring(0,2), 16) / 255;
+            opacity = alpha < 0.1 ? 0.75 : alpha;
+        }
+
+        // Nombre del grupo: usar parentGroupName (viene del NetworkLink) o docName
+        const groupName = parentGroupName || docName;
+
+        const fullPath = (layerPrefix || '') + href;
+        const imgFile  = zipFiles[fullPath] || zipFiles[href];
+        if (!imgFile) continue;
+        const blob   = await imgFile.async('blob');
+        const imgUrl = URL.createObjectURL(blob);
+        addToGroup(groupName, north, south, east, west, imgUrl, opacity);
+    }
+
+    // Vectorial
+    const geojson = toGeoJSON.kml(doc);
+    if (geojson?.features?.length) addVectorGroup(geojson, parentGroupName || docName);
+}
+
+// ── Entry point ──
+fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    clearMap();
+    const fname = file.name.toLowerCase();
+    if (!fname.endsWith('.kml') && !fname.endsWith('.kmz')) {
+        showStatus('Formato no válido (.kml/.kmz)', 'error');
+        fileInput.value = ''; return;
+    }
+
+    showStatus('Cargando…', 'info');
+
+    try {
+        if (fname.endsWith('.kmz')) {
+            const zip      = new JSZip();
+            const contents = await zip.loadAsync(file);
+            const zipFiles = contents.files;
+
+            let rootKml = zipFiles['doc.kml'] || zipFiles['index.kml'];
+            if (!rootKml) {
+                for (const [n,f] of Object.entries(zipFiles))
+                    if (!f.dir && n.endsWith('.kml') && !n.includes('/')) { rootKml = f; break; }
+            }
+            if (!rootKml) throw new Error('No se encontró KML raíz en el KMZ');
+
+            const rootText = await rootKml.async('text');
+            await parseKMLDocument(rootText, zipFiles, '', null);
+        } else {
+            await parseKMLDocument(await file.text(), {}, '', null);
+        }
+
+        if (!Object.keys(groups).length) {
+            showStatus('Sin datos visualizables', 'error'); return;
+        }
+
+        // Ajustar vista
+        try {
+            let combined = null;
+            Object.values(groups).forEach(g => g.layers.forEach(l => {
+                const b = l.layer.getBounds?.();
+                if (b) combined = combined ? combined.extend(b) : b;
+            }));
+            if (combined) map.fitBounds(combined, { padding: [40,40] });
+        } catch(_) {}
+
+        showStatus('Cargado correctamente', 'success');
+        rebuildPanel();
+        clearBtn.classList.add('visible');
+
+    } catch(err) {
+        showStatus('Error: ' + err.message, 'error');
+        console.error(err);
+    }
+});
+
+console.log('notsure KML/KMZ Map Viewer — by nitsugaone, built with Perplexity Computer');
+</script>
 </body>
 </html>
